@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verde e Saúde Natural</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===================== TELA: SPLASH / ENTRADA ===================== -->
+  <section id="tela-splash" class="tela ativa">
+    <div class="celular">
+      <div class="splash-conteudo">
+        <div class="splash-icones">🍅🥕🍌<br>🥬</div>
+        <h1>Verde e Saúde Natural</h1>
+        <p class="subtitulo">Delivery de Produtos Orgânicos<br>Conceição do Canindé – PI</p>
+        <button class="btn btn-primario" onclick="irPara('tela-login')">Entrar</button>
+        <button class="btn btn-secundario" onclick="irPara('tela-cadastro')">Criar Conta</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TELA: LOGIN ===================== -->
+  <section id="tela-login" class="tela">
+    <header class="topo">
+      <button class="btn-voltar" onclick="irPara('tela-splash')">←</button>
+      <span>🍅🥬 Verde e Saúde Natural</span>
+    </header>
+    <div class="conteudo-form">
+      <h2>Entrar na sua conta</h2>
+      <label for="login-email">E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com">
+      <label for="login-senha">Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••">
+      <button class="btn btn-primario" onclick="fazerLogin()">Entrar</button>
+      <button class="btn btn-secundario" onclick="irPara('tela-cadastro')">Criar conta</button>
+      <p id="login-erro" class="mensagem-erro"></p>
+    </div>
+  </section>
+
+  <!-- ===================== TELA: CADASTRO (RF01) ===================== -->
+  <section id="tela-cadastro" class="tela">
+    <header class="topo">
+      <button class="btn-voltar" onclick="irPara('tela-splash')">←</button>
+      <span>🍅🥬 Verde e Saúde Natural</span>
+    </header>
+    <div class="conteudo-form">
+      <h2>Criar minha conta</h2>
+      <label for="cad-nome">Nome completo</label>
+      <input type="text" id="cad-nome" placeholder="Seu nome">
+      <label for="cad-email">E-mail</label>
+      <input type="email" id="cad-email" placeholder="seu@email.com">
+      <label for="cad-telefone">Telefone</label>
+      <input type="tel" id="cad-telefone" placeholder="(89) 90000-0000">
+      <label for="cad-endereco">Endereço de entrega</label>
+      <input type="text" id="cad-endereco" placeholder="Rua, número, bairro">
+      <label for="cad-senha">Senha</label>
+      <input type="password" id="cad-senha" placeholder="Crie uma senha">
+      <button class="btn btn-primario" onclick="fazerCadastro()">Criar conta</button>
+      <p id="cadastro-erro" class="mensagem-erro"></p>
+    </div>
+  </section>
+
+  <!-- ===================== TELA: CATÁLOGO (RF03) ===================== -->
+  <section id="tela-catalogo" class="tela">
+    <header class="topo topo-app">
+      <span>🍅🥬 Verde e Saúde Natural</span>
+      <span class="carrinho-icone" onclick="irPara('tela-carrinho')">🛒<span id="badge-carrinho" class="badge">0</span></span>
+    </header>
+    <div class="busca">
+      <input type="text" id="busca-produto" placeholder="🔎 Procurar produtos..." oninput="renderizarCatalogo()">
+    </div>
+    <div id="lista-produtos" class="lista-produtos"></div>
+    <nav class="menu-inferior">
+      <button class="nav-item ativo" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
+      <button class="nav-item" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
+      <button class="nav-item" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+    </nav>
+  </section>
+
+  <!-- ===================== TELA: CARRINHO (RF04) ===================== -->
+  <section id="tela-carrinho" class="tela">
+    <header class="topo">
+      <button class="btn-voltar" onclick="irPara('tela-catalogo')">←</button>
+      <span>Seu Carrinho</span>
+    </header>
+    <div id="lista-carrinho" class="lista-carrinho"></div>
+    <div class="resumo-carrinho">
+      <div class="linha-resumo"><span>Subtotal</span><span id="carrinho-subtotal">R$ 0,00</span></div>
+      <div class="linha-resumo"><span>Entrega</span><span id="carrinho-entrega">R$ 5,00</span></div>
+      <div class="linha-resumo linha-total"><span>Total</span><span id="carrinho-total">R$ 0,00</span></div>
+      <button class="btn btn-primario" onclick="irParaPagamento()">Ir para pagamento</button>
+    </div>
+    <nav class="menu-inferior">
+      <button class="nav-item" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
+      <button class="nav-item ativo" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
+      <button class="nav-item" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+    </nav>
+  </section>
+
+  <!-- ===================== TELA: PAGAMENTO (RF05) ===================== -->
+  <section id="tela-pagamento" class="tela">
+    <header class="topo">
+      <button class="btn-voltar" onclick="irPara('tela-carrinho')">←</button>
+      <span>Pagamento</span>
+    </header>
+    <div class="conteudo-form">
+      <h2>Forma de pagamento</h2>
+      <div class="opcoes-pagamento">
+        <label class="opcao-pagamento">
+          <input type="radio" name="pagamento" value="pix" checked> 💠 Pix
+        </label>
+        <label class="opcao-pagamento">
+          <input type="radio" name="pagamento" value="cartao"> 💳 Cartão de crédito
+        </label>
+        <label class="opcao-pagamento">
+          <input type="radio" name="pagamento" value="dinheiro"> 💵 Dinheiro na entrega
+        </label>
+      </div>
+      <div class="resumo-carrinho">
+        <div class="linha-resumo linha-total"><span>Total a pagar</span><span id="pagamento-total">R$ 0,00</span></div>
+      </div>
+      <button class="btn btn-primario" onclick="confirmarPagamento()">Confirmar pagamento</button>
+      <p id="pagamento-erro" class="mensagem-erro"></p>
+    </div>
+  </section>
+
+  <!-- ===================== TELA: STATUS DO PEDIDO (RF06) ===================== -->
+  <section id="tela-status" class="tela">
+    <header class="topo">
+      <button class="btn-voltar" onclick="irPara('tela-catalogo')">←</button>
+      <span>Acompanhar Pedido</span>
+    </header>
+    <div class="conteudo-form">
+      <div id="status-vazio" class="status-vazio">
+        <p>Você ainda não fez nenhum pedido.</p>
+        <button class="btn btn-primario" onclick="irPara('tela-catalogo')">Ver catálogo</button>
+      </div>
+      <div id="status-pedido" class="status-pedido escondido">
+        <p><strong id="pedido-numero">Pedido #001</strong> · <span id="pedido-itens">0 itens</span> · <span id="pedido-total-status">R$ 0,00</span></p>
+        <div class="linha-status">
+          <div class="etapa concluida">✔<br><small>Pedido</small></div>
+          <div class="etapa concluida">✔<br><small>Preparo</small></div>
+          <div class="etapa">🚚<br><small>Entrega</small></div>
+          <div class="etapa">📦<br><small>Entregue</small></div>
+        </div>
+        <p class="info-entrega">🛵 Carlos Silva a caminho · Previsão: ~10 minutos</p>
+        <button class="btn btn-secundario" onclick="irPara('tela-catalogo')">Voltar para o início</button>
+      </div>
+    </div>
+    <nav class="menu-inferior">
+      <button class="nav-item" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
+      <button class="nav-item" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
+      <button class="nav-item ativo" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+    </nav>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
