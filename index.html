@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verde e Saúde Natural</title>
+<meta name="description" content="Verde e Saúde Natural — aplicativo de delivery de produtos orgânicos de Conceição do Canindé, PI. Conectando produtores e consumidores locais.">
+<title>Verde e Saúde Natural · Delivery de Orgânicos</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥬</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,6 +16,9 @@
   <!-- ===================== TELA: SPLASH / ENTRADA ===================== -->
   <section id="tela-splash" class="tela ativa">
     <div class="celular">
+      <svg class="blob-decorativo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="currentColor" d="M45.3,-58.5C58.5,-49.6,68.7,-34.8,72.6,-18.4C76.5,-2,74.1,16,65.8,30.5C57.5,45,43.3,55.9,27.6,62.6C11.9,69.3,-5.3,71.8,-21.3,67.6C-37.3,63.4,-52.1,52.5,-61.5,37.8C-70.9,23.1,-74.9,4.6,-71.5,-12.2C-68.1,-29,-57.3,-44.1,-43.5,-53.2C-29.7,-62.3,-14.9,-65.4,1.6,-67.4C18,-69.4,36,-70.3,45.3,-58.5Z" transform="translate(100 100)" />
+      </svg>
       <div class="splash-conteudo">
         <div class="splash-icones">🍅🥕🍌<br>🥬</div>
         <h1>Verde e Saúde Natural</h1>
@@ -24,7 +32,7 @@
   <!-- ===================== TELA: LOGIN ===================== -->
   <section id="tela-login" class="tela">
     <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-splash')">←</button>
+      <button class="btn-voltar" onclick="irPara('tela-splash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
       <span>🍅🥬 Verde e Saúde Natural</span>
     </header>
     <div class="conteudo-form">
@@ -42,7 +50,7 @@
   <!-- ===================== TELA: CADASTRO (RF01) ===================== -->
   <section id="tela-cadastro" class="tela">
     <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-splash')">←</button>
+      <button class="btn-voltar" onclick="irPara('tela-splash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
       <span>🍅🥬 Verde e Saúde Natural</span>
     </header>
     <div class="conteudo-form">
@@ -66,24 +74,24 @@
   <section id="tela-catalogo" class="tela">
     <header class="topo topo-app">
       <span>🍅🥬 Verde e Saúde Natural</span>
-      <span class="carrinho-icone" onclick="irPara('tela-carrinho')">🛒<span id="badge-carrinho" class="badge">0</span></span>
+      <span class="carrinho-icone" onclick="irPara('tela-carrinho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span id="badge-carrinho" class="badge">0</span></span>
     </header>
     <div class="busca">
       <input type="text" id="busca-produto" placeholder="🔎 Procurar produtos..." oninput="renderizarCatalogo()">
     </div>
     <div id="lista-produtos" class="lista-produtos"></div>
     <nav class="menu-inferior">
-      <button class="nav-item ativo" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
-      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
-      <button class="nav-item" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
-      <button class="nav-item" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+      <button class="nav-item ativo" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Catálogo</span></button>
+      <button class="nav-item" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
+      <button class="nav-item" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
     </nav>
   </section>
 
   <!-- ===================== TELA: CARRINHO (RF04) ===================== -->
   <section id="tela-carrinho" class="tela">
     <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-catalogo')">←</button>
+      <button class="btn-voltar" onclick="irPara('tela-catalogo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
       <span>Seu Carrinho</span>
     </header>
     <div id="lista-carrinho" class="lista-carrinho"></div>
@@ -94,17 +102,17 @@
       <button class="btn btn-primario" onclick="irParaPagamento()">Ir para pagamento</button>
     </div>
     <nav class="menu-inferior">
-      <button class="nav-item" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
-      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
-      <button class="nav-item ativo" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
-      <button class="nav-item" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Catálogo</span></button>
+      <button class="nav-item ativo" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
+      <button class="nav-item" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
     </nav>
   </section>
 
   <!-- ===================== TELA: PAGAMENTO (RF05) ===================== -->
   <section id="tela-pagamento" class="tela">
     <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-carrinho')">←</button>
+      <button class="btn-voltar" onclick="irPara('tela-carrinho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
       <span>Pagamento</span>
     </header>
     <div class="conteudo-form">
@@ -131,7 +139,7 @@
   <!-- ===================== TELA: STATUS DO PEDIDO (RF06) ===================== -->
   <section id="tela-status" class="tela">
     <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-catalogo')">←</button>
+      <button class="btn-voltar" onclick="irPara('tela-catalogo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
       <span>Acompanhar Pedido</span>
     </header>
     <div class="conteudo-form">
@@ -152,10 +160,10 @@
       </div>
     </div>
     <nav class="menu-inferior">
-      <button class="nav-item" onclick="irPara('tela-catalogo')">🏠<br>Início</button>
-      <button class="nav-item" onclick="irPara('tela-catalogo')">📋<br>Catálogo</button>
-      <button class="nav-item" onclick="irPara('tela-carrinho')">🛒<br>Carrinho</button>
-      <button class="nav-item ativo" onclick="irPara('tela-status')">📦<br>Pedidos</button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
+      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Catálogo</span></button>
+      <button class="nav-item" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
+      <button class="nav-item ativo" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
     </nav>
   </section>
 
