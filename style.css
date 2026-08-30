@@ -1,29 +1,28 @@
 /* =======================================================================
    Verde e Saúde Natural — Design System
-   Tipografia: Fraunces (display, orgânico/artesanal) + Inter (corpo, utilitária)
+   Tipografia: Fraunces (display) + Inter (corpo)
    ======================================================================= */
 
 :root{
-  --verde-900: #1B3320;
-  --verde-700: #2E4A32;
-  --verde-500: #3F6B44;
-  --verde-300: #7FA96B;
-  --verde-100: #DCE8D3;
-  --creme: #F7F2E6;
-  --creme-escuro: #ECE2C9;
-  --terracota: #C1443D;
-  --texto: #22261E;
-  --texto-suave: #6B6759;
-  --sombra-sm: 0 2px 8px rgba(27,51,32,0.08);
-  --sombra-md: 0 12px 32px rgba(27,51,32,0.28);
-  --raio-lg: 28px;
-  --raio-md: 14px;
-  --raio-sm: 9px;
+  --verde-900: #14532D;
+  --verde-700: #16A34A;
+  --verde-500: #22C55E;
+  --verde-300: #86EFAC;
+  --verde-100: #DCFCE7;
+  --creme: #FCFAF3;
+  --creme-escuro: #F0E9D2;
+  --terracota: #F97316;
+  --texto: #1C2620;
+  --texto-suave: #6B7A6E;
+  --sombra-sm: 0 2px 8px rgba(20,83,45,0.10);
+  --sombra-md: 0 20px 48px rgba(20,83,45,0.4);
+  --raio-lg: 34px;
+  --raio-md: 16px;
+  --raio-sm: 10px;
   --transicao: 180ms cubic-bezier(.4,0,.2,1);
 }
 
 *{ box-sizing: border-box; }
-
 html{ scroll-behavior: smooth; }
 
 body{
@@ -32,12 +31,14 @@ body{
   color: var(--texto);
   background: var(--verde-900);
   background-image:
-    radial-gradient(ellipse 900px 600px at 15% 10%, rgba(127,169,107,0.20), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 90% 85%, rgba(193,68,61,0.12), transparent 55%);
+    radial-gradient(ellipse 1000px 700px at 12% 8%, rgba(127,169,107,0.22), transparent 55%),
+    radial-gradient(ellipse 800px 600px at 92% 90%, rgba(193,68,61,0.14), transparent 55%);
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   padding: 32px 16px;
   -webkit-font-smoothing: antialiased;
 }
@@ -51,6 +52,21 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   from{ opacity: 0; transform: translateY(6px); }
   to{ opacity: 1; transform: translateY(0); }
 }
+
+/* ===================== Barra de status simulada ===================== */
+.barra-status{
+  width: 372px;
+  max-width: 94vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 22px;
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.status-icones{ display: flex; align-items: center; gap: 5px; }
 
 /* ===================== Moldura "celular" ===================== */
 .celular,
@@ -126,7 +142,7 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
 .topo{
   background: var(--verde-900);
   color: #fff;
-  padding: 18px 18px;
+  padding: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -135,7 +151,29 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   font-size: 15px;
 }
 
-.topo-app{ justify-content: space-between; }
+.topo-catalogo{
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 18px;
+}
+
+.topo-eyebrow{
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 3px;
+}
+
+.topo-local{
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
 .btn-voltar{
   background: rgba(255,255,255,0.12);
@@ -149,17 +187,31 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   align-items: center;
   justify-content: center;
   transition: background var(--transicao);
+  flex-shrink: 0;
 }
 .btn-voltar svg{ width: 16px; height: 16px; }
 .btn-voltar:hover{ background: rgba(255,255,255,0.22); }
 
-.carrinho-icone{ position: relative; cursor: pointer; display: flex; align-items: center; }
-.carrinho-icone svg{ width: 21px; height: 21px; color: #fff; }
+.carrinho-icone{
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.12);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transicao);
+}
+.carrinho-icone:hover{ background: rgba(255,255,255,0.2); }
+.carrinho-icone svg{ width: 18px; height: 18px; color: #fff; }
 
 .badge{
   position: absolute;
-  top: -7px;
-  right: -9px;
+  top: -4px;
+  right: -4px;
   background: var(--terracota);
   color: #fff;
   font-size: 10px;
@@ -167,7 +219,7 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   border-radius: 50%;
   min-width: 17px;
   height: 17px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 0 3px;
@@ -249,11 +301,12 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   font-weight: 500;
 }
 
-/* ===================== Catálogo ===================== */
-.busca{ padding: 16px 18px 6px; }
+/* ===================== Busca e chips ===================== */
+.busca{ padding: 16px 18px 10px; position: relative; }
+.busca-icone{ position: absolute; left: 32px; top: 50%; transform: translateY(-50%); color: var(--texto-suave); pointer-events: none; }
 .busca input{
   width: 100%;
-  padding: 11px 16px;
+  padding: 11px 16px 11px 40px;
   border-radius: 999px;
   border: 1.5px solid var(--creme-escuro);
   background: #fff;
@@ -262,62 +315,102 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
 }
 .busca input:focus{ outline: none; border-color: var(--verde-500); }
 
-.lista-produtos{ padding: 8px 18px 18px; overflow-y: auto; flex: 1; }
+.chips-categoria{
+  display: flex;
+  gap: 8px;
+  padding: 4px 18px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chips-categoria::-webkit-scrollbar{ display: none; }
+
+.chip{
+  flex-shrink: 0;
+  border: 1.5px solid var(--creme-escuro);
+  background: #fff;
+  color: var(--texto-suave);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transicao);
+}
+.chip:hover{ border-color: var(--verde-300); }
+.chip-ativo{ background: var(--terracota); border-color: var(--terracota); color: #fff; }
+
+/* ===================== Cards de produto ===================== */
+.lista-produtos{ padding: 4px 18px 18px; overflow-y: auto; flex: 1; }
 
 .cartao-produto{
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   background: #fff;
   border-radius: var(--raio-md);
-  padding: 12px 14px;
+  padding: 12px;
   margin-bottom: 10px;
   box-shadow: var(--sombra-sm);
   transition: transform var(--transicao), box-shadow var(--transicao);
 }
-.cartao-produto:hover{ transform: translateY(-2px); box-shadow: 0 8px 20px rgba(27,51,32,0.12); }
+.cartao-produto:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,40,27,0.14); }
 
-.produto-info{ display: flex; align-items: center; gap: 12px; }
-.produto-emoji{
-  font-size: 24px;
-  width: 42px; height: 42px;
+.produto-icone{
+  font-size: 26px;
+  width: 52px; height: 52px;
+  min-width: 52px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--verde-100);
-  border-radius: 12px;
+  background: linear-gradient(155deg, var(--verde-100), #fff);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: inset 0 0 0 1px rgba(20,83,45,0.08);
 }
-.produto-nome{ font-weight: 600; font-size: 14px; }
-.produto-detalhe{ font-size: 12px; color: var(--texto-suave); margin-top: 1px; }
+.produto-icone-sm{ width: 44px; height: 44px; min-width: 44px; font-size: 22px; }
 
-.btn-add{
+.produto-info{ flex: 1; min-width: 0; }
+.produto-nome{ font-weight: 600; font-size: 14px; }
+.produto-detalhe{ font-size: 11.5px; color: var(--texto-suave); margin-top: 1px; }
+.produto-preco{ font-size: 13.5px; font-weight: 700; color: var(--verde-700); margin-top: 3px; }
+.produto-preco span{ font-weight: 500; color: var(--texto-suave); font-size: 11px; }
+
+.btn-add-circular{
   background: var(--verde-900);
   color: #fff;
   border: none;
-  border-radius: 999px;
-  padding: 9px 15px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 400;
   cursor: pointer;
   transition: background var(--transicao), transform var(--transicao);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.btn-add:hover{ background: var(--verde-700); }
-.btn-add:active{ transform: scale(0.95); }
+.btn-add-circular:hover{ background: var(--verde-700); }
+.btn-add-circular:active{ transform: scale(0.88); }
 
 /* ===================== Carrinho ===================== */
 .lista-carrinho{ padding: 16px 18px; overflow-y: auto; flex: 1; }
 
 .item-carrinho{
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
   background: #fff;
   border-radius: var(--raio-md);
-  padding: 12px 14px;
+  padding: 10px 12px;
   margin-bottom: 10px;
   box-shadow: var(--sombra-sm);
 }
 
-.item-carrinho .qtd-controle{ display: flex; align-items: center; gap: 10px; }
+.item-carrinho-info{ flex: 1; min-width: 0; }
+
+.item-carrinho .qtd-controle{ display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
 .item-carrinho button{
   background: var(--creme-escuro);
@@ -365,6 +458,7 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
 .opcao-pagamento{
   display: flex;
   align-items: center;
+  gap: 10px;
   background: #fff;
   padding: 13px 14px;
   border-radius: var(--raio-md);
@@ -376,7 +470,7 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   transition: border-color var(--transicao);
 }
 .opcao-pagamento:has(input:checked){ border-color: var(--verde-500); background: var(--verde-100); }
-.opcao-pagamento input{ margin-right: 10px; width: auto; accent-color: var(--verde-700); }
+.opcao-pagamento input{ margin: 0; width: auto; accent-color: var(--verde-700); }
 
 /* ===================== Status do pedido ===================== */
 .status-vazio{ text-align: center; margin-top: 70px; color: var(--texto-suave); font-size: 13.5px; }
@@ -387,10 +481,9 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   justify-content: space-between;
   margin: 24px 0;
   text-align: center;
-  font-size: 20px;
 }
-.etapa{ flex: 1; color: var(--creme-escuro); }
-.etapa small{ display: block; font-size: 10px; color: var(--texto-suave); margin-top: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.etapa{ flex: 1; color: var(--creme-escuro); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.etapa small{ font-size: 10px; color: var(--texto-suave); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
 .etapa.concluida{ color: var(--verde-500); }
 
 .info-entrega{
@@ -431,7 +524,7 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
 
 @media (max-width: 400px){
   .celular, #tela-login, #tela-cadastro, #tela-catalogo,
-  #tela-carrinho, #tela-pagamento, #tela-status{
+  #tela-carrinho, #tela-pagamento, #tela-status, .barra-status{
     width: 94vw;
   }
 }
