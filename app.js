@@ -4,19 +4,48 @@
    ======================================================================= */
 
 // ---------- "Banco de dados" simulado (produtos do catálogo) ----------
+// Dica: as fotos vêm do Pexels (banco gratuito, uso livre). Para trocar alguma,
+// troque a URL do campo "imagem" — se ficar vazio (""), o app usa o emoji como reserva.
 const produtos = [
-  { id: 1, nome: "Tomate Orgânico",  detalhe: "R$ 8,00 /kg · João Silva",   preco: 8.00,  emoji: "🍅" },
-  { id: 2, nome: "Alface Orgânica",  detalhe: "R$ 4,50 /un · Teresa Maria", preco: 4.50,  emoji: "🥬" },
-  { id: 3, nome: "Cenoura Orgânica", detalhe: "R$ 5,00 /kg · Ana Souza",    preco: 5.00,  emoji: "🥕" },
-  { id: 4, nome: "Banana Orgânica",  detalhe: "R$ 6,50 /kg · Carlos Lima",  preco: 6.50,  emoji: "🍌" },
-  { id: 5, nome: "Ovos Caipira",     detalhe: "R$ 18,00 /dz · Sítio Boa Vida", preco: 18.00, emoji: "🥚" },
-  { id: 6, nome: "Cheiro Verde",     detalhe: "R$ 3,00 /maço · Teresa Maria", preco: 3.00, emoji: "🌿" },
+  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",       preco: 8.00,  unidade: "kg",  emoji: "🍅", imagem: "https://images.pexels.com/photos/5617/pexels-photo-5617.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",     preco: 4.50,  unidade: "un",  emoji: "🥬", imagem: "https://images.pexels.com/photos/5604/pexels-photo-5604.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza",        preco: 5.00,  unidade: "kg",  emoji: "🥕", imagem: "https://images.pexels.com/photos/73640/pexels-photo-73640.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 4, nome: "Banana Orgânica",  detalhe: "Carlos Lima",      preco: 6.50,  unidade: "kg",  emoji: "🍌", imagem: "https://images.pexels.com/photos/365810/pexels-photo-365810.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "frutas" },
+  { id: 5, nome: "Ovos Caipira",     detalhe: "Sítio Boa Vida",   preco: 18.00, unidade: "dz",  emoji: "🥚", imagem: "https://images.pexels.com/photos/2642201/pexels-photo-2642201.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "ovos" },
+  { id: 6, nome: "Cheiro Verde",     detalhe: "Teresa Maria",     preco: 3.00,  unidade: "maço", emoji: "🌿", imagem: "https://images.pexels.com/photos/1309426/pexels-photo-1309426.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+];
+
+// Gera o HTML do "quadradinho" do produto: usa a foto se existir, senão cai pro emoji.
+function iconeProduto(p, classeExtra) {
+  const classe = "produto-icone" + (classeExtra ? " " + classeExtra : "");
+  if (p.imagem) {
+    return `<img class="${classe}" src="${p.imagem}" alt="${p.nome}" loading="lazy">`;
+  }
+  return `<div class="${classe}">${p.emoji}</div>`;
+}
+
+const categorias = [
+  { id: "todos", nome: "Todos" },
+  { id: "hortalicas", nome: "Hortaliças" },
+  { id: "frutas", nome: "Frutas" },
+  { id: "ovos", nome: "Ovos" },
 ];
 
 // ---------- Estado da aplicação (em memória, some ao recarregar) ----------
 let usuarioLogado = null;
 let carrinho = {}; // { produtoId: quantidade }
+let categoriaAtiva = "todos";
 const TAXA_ENTREGA = 5.00;
+
+// ---------- Relógio da barra de status simulada ----------
+function atualizarRelogio() {
+  const agora = new Date();
+  const horas = String(agora.getHours()).padStart(2, "0");
+  const minutos = String(agora.getMinutes()).padStart(2, "0");
+  document.querySelectorAll(".status-hora").forEach(el => {
+    el.textContent = `${horas}:${minutos}`;
+  });
+}
 
 // ---------- Navegação entre telas ----------
 function irPara(idTela) {
@@ -61,12 +90,30 @@ function fazerCadastro() {
 }
 
 // ---------- RF03: Visualização do catálogo de produtos ----------
+function filtrarCategoria(idCategoria) {
+  categoriaAtiva = idCategoria;
+  renderizarCatalogo();
+}
+
+function renderizarChipsCategoria() {
+  const container = document.getElementById("chips-categoria");
+  if (!container) return;
+  container.innerHTML = categorias.map(c => `
+    <button class="chip ${c.id === categoriaAtiva ? 'chip-ativo' : ''}" onclick="filtrarCategoria('${c.id}')">${c.nome}</button>
+  `).join("");
+}
+
 function renderizarCatalogo() {
+  renderizarChipsCategoria();
   const termo = (document.getElementById("busca-produto")?.value || "").toLowerCase();
   const lista = document.getElementById("lista-produtos");
   lista.innerHTML = "";
 
-  const filtrados = produtos.filter(p => p.nome.toLowerCase().includes(termo));
+  const filtrados = produtos.filter(p => {
+    const bateNome = p.nome.toLowerCase().includes(termo);
+    const bateCategoria = categoriaAtiva === "todos" || p.categoria === categoriaAtiva;
+    return bateNome && bateCategoria;
+  });
 
   if (filtrados.length === 0) {
     lista.innerHTML = `<p class="carrinho-vazio">Nenhum produto encontrado.</p>`;
@@ -77,14 +124,13 @@ function renderizarCatalogo() {
     const div = document.createElement("div");
     div.className = "cartao-produto";
     div.innerHTML = `
+      ${iconeProduto(p)}
       <div class="produto-info">
-        <span class="produto-emoji">${p.emoji}</span>
-        <div>
-          <div class="produto-nome">${p.nome}</div>
-          <div class="produto-detalhe">${p.detalhe}</div>
-        </div>
+        <div class="produto-nome">${p.nome}</div>
+        <div class="produto-detalhe">${p.detalhe}</div>
+        <div class="produto-preco">${formatarMoeda(p.preco)} <span>/${p.unidade}</span></div>
       </div>
-      <button class="btn-add" onclick="adicionarAoCarrinho(${p.id})">Adicionar</button>
+      <button class="btn-add-circular" onclick="adicionarAoCarrinho(${p.id})" aria-label="Adicionar ${p.nome}">+</button>
     `;
     lista.appendChild(div);
   });
@@ -110,6 +156,7 @@ function atualizarBadgeCarrinho() {
   if (!badge) return;
   const totalItens = Object.values(carrinho).reduce((soma, qtd) => soma + qtd, 0);
   badge.textContent = totalItens;
+  badge.style.display = totalItens > 0 ? "flex" : "none";
 }
 
 function calcularSubtotal() {
@@ -137,17 +184,15 @@ function renderizarCarrinho() {
       const div = document.createElement("div");
       div.className = "item-carrinho";
       div.innerHTML = `
-        <div class="produto-info">
-          <span class="produto-emoji">${produto.emoji}</span>
-          <div>
-            <div class="produto-nome">${produto.nome}</div>
-            <div class="produto-detalhe">${formatarMoeda(produto.preco)} cada</div>
-          </div>
+        ${iconeProduto(produto, "produto-icone-sm")}
+        <div class="item-carrinho-info">
+          <div class="produto-nome">${produto.nome}</div>
+          <div class="produto-detalhe">${formatarMoeda(produto.preco)} /${produto.unidade}</div>
         </div>
         <div class="qtd-controle">
-          <button onclick="alterarQuantidade(${produto.id}, -1)">-</button>
+          <button onclick="alterarQuantidade(${produto.id}, -1)" aria-label="Diminuir">−</button>
           <span>${qtd}</span>
-          <button onclick="alterarQuantidade(${produto.id}, 1)">+</button>
+          <button onclick="alterarQuantidade(${produto.id}, 1)" aria-label="Aumentar">+</button>
         </div>
       `;
       lista.appendChild(div);
@@ -213,4 +258,6 @@ function confirmarPagamento() {
 // ---------- Inicialização ----------
 document.addEventListener("DOMContentLoaded", () => {
   renderizarCatalogo();
+  atualizarRelogio();
+  setInterval(atualizarRelogio, 30000);
 });
