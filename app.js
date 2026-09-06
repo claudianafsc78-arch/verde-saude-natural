@@ -7,8 +7,8 @@
 // Dica: as fotos vêm do Pexels (banco gratuito, uso livre). Para trocar alguma,
 // troque a URL do campo "imagem" — se ficar vazio (""), o app usa o emoji como reserva.
 const produtos = [
-  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",       preco: 8.00,  unidade: "kg",  emoji: "🍅", imagem: "https://images.pexels.com/photos/5617/pexels-photo-5617.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
-  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",     preco: 4.50,  unidade: "un",  emoji: "🥬", imagem: "https://images.pexels.com/photos/5604/pexels-photo-5604.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",       preco: 8.00,  unidade: "kg",  emoji: "🍅", imagem: "https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",     preco: 4.50,  unidade: "un",  emoji: "🥬", imagem: "https://images.pexels.com/photos/2893639/pexels-photo-2893639.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
   { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza",        preco: 5.00,  unidade: "kg",  emoji: "🥕", imagem: "https://images.pexels.com/photos/73640/pexels-photo-73640.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
   { id: 4, nome: "Banana Orgânica",  detalhe: "Carlos Lima",      preco: 6.50,  unidade: "kg",  emoji: "🍌", imagem: "https://images.pexels.com/photos/365810/pexels-photo-365810.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "frutas" },
   { id: 5, nome: "Ovos Caipira",     detalhe: "Sítio Boa Vida",   preco: 18.00, unidade: "dz",  emoji: "🥚", imagem: "https://images.pexels.com/photos/2642201/pexels-photo-2642201.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "ovos" },
@@ -16,12 +16,21 @@ const produtos = [
 ];
 
 // Gera o HTML do "quadradinho" do produto: usa a foto se existir, senão cai pro emoji.
+// Se a foto existir mas falhar ao carregar (link quebrado, sem internet, etc.),
+// tratarErroImagem() troca automaticamente pelo emoji, sem deixar ícone de imagem quebrada.
 function iconeProduto(p, classeExtra) {
   const classe = "produto-icone" + (classeExtra ? " " + classeExtra : "");
   if (p.imagem) {
-    return `<img class="${classe}" src="${p.imagem}" alt="${p.nome}" loading="lazy">`;
+    return `<img class="${classe}" src="${p.imagem}" alt="${p.nome}" loading="lazy" data-emoji="${p.emoji}" onerror="tratarErroImagem(this)">`;
   }
   return `<div class="${classe}">${p.emoji}</div>`;
+}
+
+function tratarErroImagem(img) {
+  const div = document.createElement("div");
+  div.className = img.className;
+  div.textContent = img.dataset.emoji;
+  img.replaceWith(div);
 }
 
 const categorias = [
