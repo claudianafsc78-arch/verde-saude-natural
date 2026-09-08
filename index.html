@@ -1,205 +1,332 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Verde e Saúde Natural — aplicativo de delivery de produtos orgânicos de Conceição do Canindé, PI.">
-<title>Verde e Saúde Natural · Delivery de Orgânicos</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥬</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+/* =======================================================================
+   Verde e Saúde Natural — Front-End (HTML/CSS/JS puro)
+   Sprint 1: RF03 Catálogo | RF04 Carrinho | RF05 Pagamento
+   ======================================================================= */
 
-  <!-- ===================== TELA: SPLASH / ENTRADA ===================== -->
-  <section id="tela-splash" class="tela ativa">
-    <div class="celular">
-      <svg class="blob-decorativo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path fill="currentColor" d="M45.3,-58.5C58.5,-49.6,68.7,-34.8,72.6,-18.4C76.5,-2,74.1,16,65.8,30.5C57.5,45,43.3,55.9,27.6,62.6C11.9,69.3,-5.3,71.8,-21.3,67.6C-37.3,63.4,-52.1,52.5,-61.5,37.8C-70.9,23.1,-74.9,4.6,-71.5,-12.2C-68.1,-29,-57.3,-44.1,-43.5,-53.2C-29.7,-62.3,-14.9,-65.4,1.6,-67.4C18,-69.4,36,-70.3,45.3,-58.5Z" transform="translate(100 100)" />
-      </svg>
-      <div class="splash-conteudo">
-        <div class="logo-mark logo-mark-grande">
-          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="20" cy="20" r="20" fill="url(#logoGradSplash)"/>
-            <path d="M20 30c-5-1-8-5-8-10 0-6 4-10 8-12 4 2 8 6 8 12 0 5-3 9-8 10z" fill="#fff"/>
-            <path d="M20 30V14" stroke="url(#logoGradSplash)" stroke-width="1.6" stroke-linecap="round"/>
-            <defs><linearGradient id="logoGradSplash" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#16A34A"/><stop offset="1" stop-color="#14532D"/></linearGradient></defs>
-          </svg>
+// ---------- "Banco de dados" simulado (produtos do catálogo) ----------
+// Os ícones são desenhados em SVG direto no código (não dependem de internet/link
+// externo), então NUNCA aparecem quebrados — sempre carregam, mesmo offline.
+const icones = {
+  tomate: `<svg viewBox="0 0 40 40"><path d="M20 8c-1.5-2-3.5-3-3.5-3s.5 2.5 2 4" stroke="#3F6B44" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M20 8c1.5-2 3.5-3 3.5-3s-.5 2.5-2 4" stroke="#3F6B44" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="20" cy="23" rx="13" ry="12" fill="#E4453B"/><ellipse cx="16" cy="19" rx="4" ry="3" fill="#F2685F" opacity="0.7"/></svg>`,
+  alface: `<svg viewBox="0 0 40 40"><path d="M20 32c-8 0-13-6-13-13 0-5 3-9 7-11-1 3 0 6 2 8-2-4-1-9 3-12 0 4 1 7 3 9 0-4 2-8 5-10-1 4 0 8 2 11 2-3 5-4 8-4-3 2-5 5-5 9 3-1 6 0 8 2-4 0-7 2-8 5 3 0 5 2 6 4-8 3-12 12-18 12z" fill="#3F9142"/><path d="M20 32c-6 0-10-4-11-9" stroke="#2E6B30" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`,
+  cenoura: `<svg viewBox="0 0 40 40"><path d="M15 6l3 6M20 5l1 7M25 6l-3 6" stroke="#3F9142" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M20 13c6 0 9 5 8 11-1 7-5 12-8 15-3-3-7-8-8-15-1-6 2-11 8-11z" fill="#F0842E"/><path d="M20 17v18M15 20l2 12M25 20l-2 12" stroke="#D9701F" stroke-width="1.2" opacity="0.6"/></svg>`,
+  banana: `<svg viewBox="0 0 40 40"><path d="M11 27c-1 3 1 6 4 6 9 0 17-7 18-16 0-2-1-4-3-4-1 0-2 1-2 2-1 8-8 14-16 14-1 0-1-1-1-2z" fill="#F4C338"/><path d="M11 27c0-1 0-2 1-3" stroke="#D9A82B" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M28 9c1 1 2 3 2 4" stroke="#7A5A1E" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`,
+  ovos: `<svg viewBox="0 0 40 40"><ellipse cx="16" cy="24" rx="7" ry="9" fill="#F2E4C9"/><ellipse cx="25" cy="21" rx="7.5" ry="9.5" fill="#FFF8E8" stroke="#EDE0C0" stroke-width="1"/></svg>`,
+  cheiroverde: `<svg viewBox="0 0 40 40"><path d="M20 33V12" stroke="#3F9142" stroke-width="2" stroke-linecap="round"/><path d="M20 14c-3-3-8-3-8-3s1 5 5 7M20 18c-3-3-8-3-8-3s1 5 5 7M20 22c3-3 8-3 8-3s-1 5-5 7M20 26c3-3 8-3 8-3s-1 5-5 7" stroke="#4CAF50" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+};
+
+const produtos = [
+  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",       preco: 8.00,  unidade: "kg",  icone: icones.tomate,      categoria: "hortalicas" },
+  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",     preco: 4.50,  unidade: "un",  icone: icones.alface,      categoria: "hortalicas" },
+  { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza",        preco: 5.00,  unidade: "kg",  icone: icones.cenoura,     categoria: "hortalicas" },
+  { id: 4, nome: "Banana Orgânica",  detalhe: "Carlos Lima",      preco: 6.50,  unidade: "kg",  icone: icones.banana,      categoria: "frutas" },
+  { id: 5, nome: "Ovos Caipira",     detalhe: "Sítio Boa Vida",   preco: 18.00, unidade: "dz",  icone: icones.ovos,        categoria: "ovos" },
+  { id: 6, nome: "Cheiro Verde",     detalhe: "Teresa Maria",     preco: 3.00,  unidade: "maço", icone: icones.cheiroverde, categoria: "hortalicas" },
+];
+
+// Gera o HTML do "quadradinho" do produto com o ícone desenhado em SVG.
+function iconeProduto(p, classeExtra) {
+  const classe = "produto-icone" + (classeExtra ? " " + classeExtra : "");
+  return `<div class="${classe}">${p.icone}</div>`;
+}
+
+const categorias = [
+  { id: "todos", nome: "Todos" },
+  { id: "hortalicas", nome: "Hortaliças" },
+  { id: "frutas", nome: "Frutas" },
+  { id: "ovos", nome: "Ovos" },
+];
+
+// ---------- Estado da aplicação (em memória, some ao recarregar) ----------
+let usuarioLogado = null;
+let carrinho = {}; // { produtoId: quantidade }
+let categoriaAtiva = "todos";
+const TAXA_ENTREGA = 5.00;
+
+// ---------- Navegação entre telas ----------
+function irPara(idTela) {
+  document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+  document.getElementById(idTela).classList.add("ativa");
+
+  if (idTela === "tela-catalogo") renderizarCatalogo();
+  if (idTela === "tela-carrinho") renderizarCarrinho();
+  if (idTela === "tela-pagamento") renderizarPagamento();
+  if (idTela === "tela-entregador") renderizarEntregas();
+}
+
+// ---------- RF01 / Login e Cadastro (simulados, sem back-end ainda) ----------
+function fazerLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const senha = document.getElementById("login-senha").value.trim();
+  const erro = document.getElementById("login-erro");
+
+  if (!email || !senha) {
+    erro.textContent = "Preencha e-mail e senha para continuar.";
+    return;
+  }
+  erro.textContent = "";
+  usuarioLogado = { email };
+  irPara("tela-catalogo");
+}
+
+function fazerCadastro() {
+  const nome = document.getElementById("cad-nome").value.trim();
+  const email = document.getElementById("cad-email").value.trim();
+  const telefone = document.getElementById("cad-telefone").value.trim();
+  const endereco = document.getElementById("cad-endereco").value.trim();
+  const senha = document.getElementById("cad-senha").value.trim();
+  const erro = document.getElementById("cadastro-erro");
+
+  if (!nome || !email || !telefone || !endereco || !senha) {
+    erro.textContent = "Todos os campos são obrigatórios.";
+    return;
+  }
+  erro.textContent = "";
+  usuarioLogado = { nome, email, telefone, endereco };
+  irPara("tela-catalogo");
+}
+
+// ---------- RF03: Visualização do catálogo de produtos ----------
+function filtrarCategoria(idCategoria) {
+  categoriaAtiva = idCategoria;
+  renderizarCatalogo();
+}
+
+function renderizarChipsCategoria() {
+  const container = document.getElementById("chips-categoria");
+  if (!container) return;
+  container.innerHTML = categorias.map(c => `
+    <button class="chip ${c.id === categoriaAtiva ? 'chip-ativo' : ''}" onclick="filtrarCategoria('${c.id}')">${c.nome}</button>
+  `).join("");
+}
+
+function renderizarCatalogo() {
+  renderizarChipsCategoria();
+  const termo = (document.getElementById("busca-produto")?.value || "").toLowerCase();
+  const lista = document.getElementById("lista-produtos");
+  lista.innerHTML = "";
+
+  const filtrados = produtos.filter(p => {
+    const bateNome = p.nome.toLowerCase().includes(termo);
+    const bateCategoria = categoriaAtiva === "todos" || p.categoria === categoriaAtiva;
+    return bateNome && bateCategoria;
+  });
+
+  if (filtrados.length === 0) {
+    lista.innerHTML = `<p class="carrinho-vazio">Nenhum produto encontrado.</p>`;
+    return;
+  }
+
+  filtrados.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "cartao-produto";
+    div.innerHTML = `
+      ${iconeProduto(p)}
+      <div class="produto-info">
+        <div class="produto-nome">${p.nome}</div>
+        <div class="produto-detalhe">${p.detalhe}</div>
+        <div class="produto-preco">${formatarMoeda(p.preco)} <span>/${p.unidade}</span></div>
+      </div>
+      <button class="btn-add-circular" onclick="adicionarAoCarrinho(${p.id})" aria-label="Adicionar ${p.nome}">+</button>
+    `;
+    lista.appendChild(div);
+  });
+
+  atualizarBadgeCarrinho();
+}
+
+// ---------- RF04: Adicionar produtos ao carrinho ----------
+function adicionarAoCarrinho(idProduto) {
+  carrinho[idProduto] = (carrinho[idProduto] || 0) + 1;
+  atualizarBadgeCarrinho();
+}
+
+function alterarQuantidade(idProduto, delta) {
+  if (!carrinho[idProduto]) return;
+  carrinho[idProduto] += delta;
+  if (carrinho[idProduto] <= 0) delete carrinho[idProduto];
+  renderizarCarrinho();
+}
+
+function atualizarBadgeCarrinho() {
+  const badge = document.getElementById("badge-carrinho");
+  if (!badge) return;
+  const totalItens = Object.values(carrinho).reduce((soma, qtd) => soma + qtd, 0);
+  badge.textContent = totalItens;
+  badge.style.display = totalItens > 0 ? "flex" : "none";
+}
+
+function calcularSubtotal() {
+  return Object.entries(carrinho).reduce((soma, [id, qtd]) => {
+    const produto = produtos.find(p => p.id === Number(id));
+    return soma + (produto ? produto.preco * qtd : 0);
+  }, 0);
+}
+
+function formatarMoeda(valor) {
+  return "R$ " + valor.toFixed(2).replace(".", ",");
+}
+
+function renderizarCarrinho() {
+  const lista = document.getElementById("lista-carrinho");
+  lista.innerHTML = "";
+
+  const itens = Object.entries(carrinho);
+
+  if (itens.length === 0) {
+    lista.innerHTML = `<p class="carrinho-vazio">Seu carrinho está vazio.<br>Volte ao catálogo e adicione produtos! 🥬</p>`;
+  } else {
+    itens.forEach(([id, qtd]) => {
+      const produto = produtos.find(p => p.id === Number(id));
+      const div = document.createElement("div");
+      div.className = "item-carrinho";
+      div.innerHTML = `
+        ${iconeProduto(produto, "produto-icone-sm")}
+        <div class="item-carrinho-info">
+          <div class="produto-nome">${produto.nome}</div>
+          <div class="produto-detalhe">${formatarMoeda(produto.preco)} /${produto.unidade}</div>
         </div>
-        <h1>Verde e Saúde Natural</h1>
-        <p class="subtitulo">Delivery de Produtos Orgânicos<br>Conceição do Canindé – PI</p>
-        <button class="btn btn-primario" onclick="irPara('tela-login')">Entrar</button>
-        <button class="btn btn-secundario" onclick="irPara('tela-cadastro')">Criar Conta</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== TELA: LOGIN ===================== -->
-  <section id="tela-login" class="tela">
-    <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-splash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <svg class="logo-mark" width="30" height="30" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="20" cy="20" r="20" fill="url(#logoGrad)"/>
-        <path d="M20 30c-5-1-8-5-8-10 0-6 4-10 8-12 4 2 8 6 8 12 0 5-3 9-8 10z" fill="#fff"/>
-        <path d="M20 30V14" stroke="url(#logoGrad)" stroke-width="1.6" stroke-linecap="round"/>
-        <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#16A34A"/><stop offset="1" stop-color="#14532D"/></linearGradient></defs>
-      </svg>
-      <span>Verde e Saúde Natural</span>
-    </header>
-    <div class="conteudo-form">
-      <h2>Entrar na sua conta</h2>
-      <label for="login-email">E-mail</label>
-      <input type="email" id="login-email" placeholder="seu@email.com">
-      <label for="login-senha">Senha</label>
-      <input type="password" id="login-senha" placeholder="••••••••">
-      <button class="btn btn-primario" onclick="fazerLogin()">Entrar</button>
-      <button class="btn btn-secundario" onclick="irPara('tela-cadastro')">Criar conta</button>
-      <p id="login-erro" class="mensagem-erro"></p>
-    </div>
-  </section>
-
-  <!-- ===================== TELA: CADASTRO (RF01) ===================== -->
-  <section id="tela-cadastro" class="tela">
-    <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-splash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <svg class="logo-mark" width="30" height="30" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="20" cy="20" r="20" fill="url(#logoGrad)"/>
-        <path d="M20 30c-5-1-8-5-8-10 0-6 4-10 8-12 4 2 8 6 8 12 0 5-3 9-8 10z" fill="#fff"/>
-        <path d="M20 30V14" stroke="url(#logoGrad)" stroke-width="1.6" stroke-linecap="round"/>
-        <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#16A34A"/><stop offset="1" stop-color="#14532D"/></linearGradient></defs>
-      </svg>
-      <span>Verde e Saúde Natural</span>
-    </header>
-    <div class="conteudo-form">
-      <h2>Criar minha conta</h2>
-      <label for="cad-nome">Nome completo</label>
-      <input type="text" id="cad-nome" placeholder="Seu nome">
-      <label for="cad-email">E-mail</label>
-      <input type="email" id="cad-email" placeholder="seu@email.com">
-      <label for="cad-telefone">Telefone</label>
-      <input type="tel" id="cad-telefone" placeholder="(89) 90000-0000">
-      <label for="cad-endereco">Endereço de entrega</label>
-      <input type="text" id="cad-endereco" placeholder="Rua, número, bairro">
-      <label for="cad-senha">Senha</label>
-      <input type="password" id="cad-senha" placeholder="Crie uma senha">
-      <button class="btn btn-primario" onclick="fazerCadastro()">Criar conta</button>
-      <p id="cadastro-erro" class="mensagem-erro"></p>
-    </div>
-  </section>
-
-  <!-- ===================== TELA: CATÁLOGO (RF03) ===================== -->
-  <section id="tela-catalogo" class="tela">
-    <header class="topo topo-catalogo">
-      <div>
-        <div class="topo-nome-app">Verde e Saúde Natural</div>
-        <div class="topo-local-pequeno">
-          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          Conceição do Canindé – PI
+        <div class="qtd-controle">
+          <button onclick="alterarQuantidade(${produto.id}, -1)" aria-label="Diminuir">−</button>
+          <span>${qtd}</span>
+          <button onclick="alterarQuantidade(${produto.id}, 1)" aria-label="Aumentar">+</button>
         </div>
-      </div>
-      <span class="carrinho-icone" onclick="irPara('tela-carrinho')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg>
-        <span id="badge-carrinho" class="badge">0</span>
-      </span>
-    </header>
-    <div class="busca">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="busca-icone"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input type="text" id="busca-produto" placeholder="Procurar produtos..." oninput="renderizarCatalogo()">
-    </div>
-    <div id="chips-categoria" class="chips-categoria"></div>
-    <div id="lista-produtos" class="lista-produtos"></div>
-    <nav class="menu-inferior">
-      <button class="nav-item ativo" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
-      <button class="nav-item" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
-      <button class="nav-item" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
-    </nav>
-  </section>
+      `;
+      lista.appendChild(div);
+    });
+  }
 
-  <!-- ===================== TELA: CARRINHO (RF04) ===================== -->
-  <section id="tela-carrinho" class="tela">
-    <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-catalogo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <span>Seu Carrinho</span>
-    </header>
-    <div id="lista-carrinho" class="lista-carrinho"></div>
-    <div class="resumo-carrinho">
-      <div class="linha-resumo"><span>Subtotal</span><span id="carrinho-subtotal">R$ 0,00</span></div>
-      <div class="linha-resumo"><span>Entrega</span><span id="carrinho-entrega">R$ 5,00</span></div>
-      <div class="linha-resumo linha-total"><span>Total</span><span id="carrinho-total">R$ 0,00</span></div>
-      <button class="btn btn-primario" onclick="irParaPagamento()">Ir para pagamento</button>
-    </div>
-    <nav class="menu-inferior">
-      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
-      <button class="nav-item ativo" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
-      <button class="nav-item" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
-    </nav>
-  </section>
+  const subtotal = calcularSubtotal();
+  const total = itens.length > 0 ? subtotal + TAXA_ENTREGA : 0;
 
-  <!-- ===================== TELA: PAGAMENTO (RF05) ===================== -->
-  <section id="tela-pagamento" class="tela">
-    <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-carrinho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <span>Pagamento</span>
-    </header>
-    <div class="conteudo-form">
-      <h2>Forma de pagamento</h2>
-      <div class="opcoes-pagamento">
-        <label class="opcao-pagamento">
-          <input type="radio" name="pagamento" value="pix" checked>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><rect x="8" y="8" width="8" height="8" rx="2"/></svg>
-          Pix
-        </label>
-        <label class="opcao-pagamento">
-          <input type="radio" name="pagamento" value="cartao">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          Cartão de crédito
-        </label>
-        <label class="opcao-pagamento">
-          <input type="radio" name="pagamento" value="dinheiro">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-          Dinheiro na entrega
-        </label>
-      </div>
-      <div class="resumo-carrinho">
-        <div class="linha-resumo linha-total"><span>Total a pagar</span><span id="pagamento-total">R$ 0,00</span></div>
-      </div>
-      <button class="btn btn-primario" onclick="confirmarPagamento()">Confirmar pagamento</button>
-      <p id="pagamento-erro" class="mensagem-erro"></p>
-    </div>
-  </section>
+  document.getElementById("carrinho-subtotal").textContent = formatarMoeda(subtotal);
+  document.getElementById("carrinho-entrega").textContent = itens.length > 0 ? formatarMoeda(TAXA_ENTREGA) : formatarMoeda(0);
+  document.getElementById("carrinho-total").textContent = formatarMoeda(total);
 
-  <!-- ===================== TELA: STATUS DO PEDIDO (RF06) ===================== -->
-  <section id="tela-status" class="tela">
-    <header class="topo">
-      <button class="btn-voltar" onclick="irPara('tela-catalogo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <span>Acompanhar Pedido</span>
-    </header>
-    <div class="conteudo-form">
-      <div id="status-vazio" class="status-vazio">
-        <p>Você ainda não fez nenhum pedido.</p>
-        <button class="btn btn-primario" onclick="irPara('tela-catalogo')">Ver catálogo</button>
-      </div>
-      <div id="status-pedido" class="status-pedido escondido">
-        <p><strong id="pedido-numero">Pedido #001</strong> · <span id="pedido-itens">0 itens</span> · <span id="pedido-total-status">R$ 0,00</span></p>
-        <div class="linha-status">
-          <div class="etapa concluida"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><small>Pedido</small></div>
-          <div class="etapa concluida"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><small>Preparo</small></div>
-          <div class="etapa"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="7" width="14" height="9" rx="1"/><path d="M15 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg><small>Entrega</small></div>
-          <div class="etapa"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/></svg><small>Entregue</small></div>
+  atualizarBadgeCarrinho();
+}
+
+function irParaPagamento() {
+  if (Object.keys(carrinho).length === 0) {
+    alert("Adicione ao menos um produto ao carrinho antes de continuar.");
+    return;
+  }
+  irPara("tela-pagamento");
+}
+
+// ---------- RF05: Efetuar o pagamento do pedido ----------
+function renderizarPagamento() {
+  const subtotal = calcularSubtotal();
+  const total = subtotal + TAXA_ENTREGA;
+  document.getElementById("pagamento-total").textContent = formatarMoeda(total);
+}
+
+function confirmarPagamento() {
+  const erro = document.getElementById("pagamento-erro");
+  const formaPagamento = document.querySelector('input[name="pagamento"]:checked');
+
+  if (!formaPagamento) {
+    erro.textContent = "Selecione uma forma de pagamento.";
+    return;
+  }
+  if (Object.keys(carrinho).length === 0) {
+    erro.textContent = "Seu carrinho está vazio.";
+    return;
+  }
+
+  erro.textContent = "";
+
+  const totalItens = Object.values(carrinho).reduce((soma, qtd) => soma + qtd, 0);
+  const totalPedido = calcularSubtotal() + TAXA_ENTREGA;
+
+  document.getElementById("pedido-numero").textContent = "Pedido #001";
+  document.getElementById("pedido-itens").textContent = totalItens + (totalItens === 1 ? " item" : " itens");
+  document.getElementById("pedido-total-status").textContent = formatarMoeda(totalPedido);
+
+  document.getElementById("status-vazio").classList.add("escondido");
+  document.getElementById("status-pedido").classList.remove("escondido");
+
+  carrinho = {};
+  atualizarBadgeCarrinho();
+
+  irPara("tela-status");
+}
+
+// ---------- Inicialização ----------
+document.addEventListener("DOMContentLoaded", () => {
+  renderizarCatalogo();
+});
+
+// ---------- RF07: Entregador visualiza as entregas atribuídas ----------
+let entregas = [
+  { id: 1, pedido: "#0038", cliente: "Maria Oliveira", endereco: "Rua das Flores, 120 - Centro", itens: 4, total: 42.50, status: "pendente" },
+  { id: 2, pedido: "#0039", cliente: "José Ferreira",   endereco: "Av. Piauí, 55 - São José",     itens: 2, total: 18.00, status: "a_caminho" },
+  { id: 3, pedido: "#0040", cliente: "Ana Beatriz",      endereco: "Rua Nova, 300 - Centro",        itens: 6, total: 67.30, status: "pendente" },
+  { id: 4, pedido: "#0035", cliente: "Paulo Sousa",       endereco: "Rua da Paz, 12 - Vila Nova",    itens: 3, total: 29.90, status: "entregue" },
+];
+
+const iconeLocal = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>`;
+
+const filtrosEntrega = [
+  { id: "ativas", nome: "Ativas" },
+  { id: "entregue", nome: "Concluídas" },
+];
+let filtroEntregaAtivo = "ativas";
+
+const textoStatus = { pendente: "Pendente", a_caminho: "A caminho", entregue: "Entregue" };
+const textoAcao = { pendente: "Aceitar entrega", a_caminho: "Marcar como entregue" };
+
+function filtrarEntregas(idFiltro) {
+  filtroEntregaAtivo = idFiltro;
+  renderizarEntregas();
+}
+
+function renderizarChipsEntrega() {
+  const container = document.getElementById("chips-status-entrega");
+  if (!container) return;
+  container.innerHTML = filtrosEntrega.map(f => `
+    <button class="chip ${f.id === filtroEntregaAtivo ? 'chip-ativo' : ''}" onclick="filtrarEntregas('${f.id}')">${f.nome}</button>
+  `).join("");
+}
+
+function renderizarEntregas() {
+  renderizarChipsEntrega();
+  const lista = document.getElementById("lista-entregas");
+  if (!lista) return;
+
+  const filtradas = entregas.filter(e =>
+    filtroEntregaAtivo === "ativas" ? e.status !== "entregue" : e.status === "entregue"
+  );
+
+  if (filtradas.length === 0) {
+    lista.innerHTML = `<p class="carrinho-vazio">Nenhuma entrega ${filtroEntregaAtivo === "ativas" ? "pendente" : "concluída"} no momento.</p>`;
+    return;
+  }
+
+  lista.innerHTML = filtradas.map(e => `
+    <div class="cartao-entrega">
+      <div class="entrega-topo">
+        <div>
+          <div class="entrega-pedido">Pedido ${e.pedido}</div>
+          <div class="entrega-cliente">${e.cliente} · ${e.itens} itens</div>
         </div>
-        <p class="info-entrega">Carlos Silva a caminho · Previsão: ~10 minutos</p>
-        <button class="btn btn-secundario" onclick="irPara('tela-catalogo')">Voltar para o início</button>
+        <span class="status-badge status-${e.status}">${textoStatus[e.status]}</span>
+      </div>
+      <div class="entrega-endereco">${iconeLocal}<span>${e.endereco}</span></div>
+      <div class="entrega-rodape">
+        <span class="entrega-valor">${formatarMoeda(e.total)}</span>
+        ${e.status !== "entregue"
+          ? `<button class="btn-entrega-acao" onclick="avancarStatusEntrega(${e.id})">${textoAcao[e.status]}</button>`
+          : `<span class="produto-detalhe">✔ Concluída</span>`}
       </div>
     </div>
-    <nav class="menu-inferior">
-      <button class="nav-item" onclick="irPara('tela-catalogo')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Início</span></button>
-      <button class="nav-item" onclick="irPara('tela-carrinho')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span>Carrinho</span></button>
-      <button class="nav-item ativo" onclick="irPara('tela-status')"><svg class="icone-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.2L12 13l8.7-4.8M12 13v8"/></svg><span>Pedidos</span></button>
-    </nav>
-  </section>
+  `).join("");
+}
 
-  <script src="app.js"></script>
-</body>
-</html>
+function avancarStatusEntrega(id) {
+  const entrega = entregas.find(e => e.id === id);
+  if (!entrega) return;
+  if (entrega.status === "pendente") entrega.status = "a_caminho";
+  else if (entrega.status === "a_caminho") entrega.status = "entregue";
+  renderizarEntregas();
+}
