@@ -53,21 +53,6 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   to{ opacity: 1; transform: translateY(0); }
 }
 
-/* ===================== Barra de status simulada ===================== */
-.barra-status{
-  width: 372px;
-  max-width: 94vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 22px;
-  color: rgba(255,255,255,0.85);
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.status-icones{ display: flex; align-items: center; gap: 5px; }
-
 /* ===================== Moldura "celular" ===================== */
 .celular,
 #tela-login, #tela-cadastro, #tela-catalogo, #tela-carrinho,
@@ -138,21 +123,83 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   letter-spacing: 0.01em;
 }
 
-/* ===================== Logo ===================== */
-.logo-mark{
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border-radius: 50%;
+.link-discreto{
+  background: none;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 12.5px;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 18px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-discreto:hover{ color: var(--verde-700); }
+
+/* ===================== Cards de entrega (Entregador) ===================== */
+.cartao-entrega{
+  background: #fff;
+  border-radius: var(--raio-md);
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: var(--sombra-sm);
 }
 
-.logo-mark-grande{
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 14px;
-  filter: drop-shadow(0 6px 14px rgba(20,83,45,0.3));
+.entrega-topo{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
 }
-.logo-mark-grande svg{ width: 100%; height: 100%; }
+
+.entrega-pedido{ font-weight: 700; font-size: 14px; }
+.entrega-cliente{ font-size: 12.5px; color: var(--texto-suave); margin-top: 2px; }
+
+.entrega-endereco{
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--texto-suave);
+  margin: 8px 0;
+  line-height: 1.4;
+}
+.entrega-endereco svg{ flex-shrink: 0; margin-top: 2px; color: var(--verde-700); }
+
+.entrega-rodape{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.entrega-valor{ font-weight: 700; color: var(--verde-700); font-size: 14px; }
+
+.status-badge{
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-pendente{ background: var(--creme-escuro); color: var(--texto-suave); }
+.status-a_caminho{ background: #FEF3C7; color: #B45309; }
+.status-entregue{ background: var(--verde-100); color: var(--verde-700); }
+
+.btn-entrega-acao{
+  background: var(--verde-900);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transicao);
+}
+.btn-entrega-acao:hover{ background: var(--verde-700); }
 
 /* ===================== Cabeçalho ===================== */
 .topo{
@@ -189,6 +236,21 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
   gap: 4px;
   margin-top: 3px;
 }
+
+.logo-mark{
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.logo-mark-grande{
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  filter: drop-shadow(0 6px 14px rgba(20,83,45,0.3));
+}
+.logo-mark-grande svg{ width: 100%; height: 100%; }
 
 .btn-voltar{
   background: rgba(255,255,255,0.12);
@@ -372,16 +434,16 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
 .cartao-produto:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,40,27,0.14); }
 
 .produto-icone{
-  font-size: 26px;
   width: 52px; height: 52px;
   min-width: 52px;
   display: flex; align-items: center; justify-content: center;
   background: linear-gradient(155deg, var(--verde-100), #fff);
   border-radius: 50%;
-  object-fit: cover;
   box-shadow: inset 0 0 0 1px rgba(20,83,45,0.08);
+  padding: 8px;
 }
-.produto-icone-sm{ width: 44px; height: 44px; min-width: 44px; font-size: 22px; }
+.produto-icone svg{ width: 100%; height: 100%; }
+.produto-icone-sm{ width: 44px; height: 44px; min-width: 44px; padding: 6px; }
 
 .produto-info{ flex: 1; min-width: 0; }
 .produto-nome{ font-weight: 600; font-size: 14px; }
@@ -545,7 +607,6 @@ h1, h2{ font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
     align-items: stretch;
     gap: 0;
   }
-  .barra-status{ display: none; }
   .celular, #tela-login, #tela-cadastro, #tela-catalogo,
   #tela-carrinho, #tela-pagamento, #tela-status{
     width: 100vw;
