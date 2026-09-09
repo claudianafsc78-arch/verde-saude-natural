@@ -29,19 +29,22 @@ O projeto busca criar um ambiente digital que permita:
 - **CSS3** – estilização, layout e identidade visual;
 - **JavaScript** – interações e funcionalidades da aplicação.
 
-### Versionamento e publicação
+## 🔗 Links do Projeto
 
-- **GitHub** – armazenamento e versionamento do código-fonte;
-- **GitHub Pages** – publicação da aplicação para acesso pela web;
-- **Trello** – organização e acompanhamento das tarefas da equipe.
+### 📋 Trello
 
----
+[Quadro de organização do projeto](https://trello.com/b/Ip4aYZSi)
 
-## 📂 Estrutura do Projeto
+### 🌐 Aplicação publicada
 
-```text
-verde-saude-natural/
-│
-├── index.html
-├── style.css
-└── app.js
+[Verde e Saúde Natural](https://claudianafsc78-arch.github.io/verde-saude-natural/)
+
+### 💻 Repositório no GitHub
+
+[GitHub – Verde e Saúde Natural](https://github.com/claudianafsc78-arch/verde-saude-natural)
+
+
+
+
+
+
