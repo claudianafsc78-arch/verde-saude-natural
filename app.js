@@ -1,43 +1,42 @@
 /* =======================================================================
    Verde e Saúde Natural — Front-End (HTML/CSS/JS puro)
-   Sprint 1: RF03 Catálogo | RF04 Carrinho | RF05 Pagamento
+   Sprint 1: RF03 Catálogo | RF04 Carrinho | RF05 Pagamento | RF07 Entregador
    ======================================================================= */
 
+// ---------- Ícones dos produtos (desenhados em SVG, sem depender de internet) ----------
+const icones = {
+  tomate: `<svg viewBox="0 0 40 40"><path d="M20 8c-1.5-2-3.5-3-3.5-3s.5 2.5 2 4" stroke="#3F6B44" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M20 8c1.5-2 3.5-3 3.5-3s-.5 2.5-2 4" stroke="#3F6B44" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="20" cy="23" rx="13" ry="12" fill="#E4453B"/><ellipse cx="16" cy="19" rx="4" ry="3" fill="#F2685F" opacity="0.7"/></svg>`,
+  alface: `<svg viewBox="0 0 40 40"><path d="M20 32c-8 0-13-6-13-13 0-5 3-9 7-11-1 3 0 6 2 8-2-4-1-9 3-12 0 4 1 7 3 9 0-4 2-8 5-10-1 4 0 8 2 11 2-3 5-4 8-4-3 2-5 5-5 9 3-1 6 0 8 2-4 0-7 2-8 5 3 0 5 2 6 4-8 3-12 12-18 12z" fill="#3F9142"/><path d="M20 32c-6 0-10-4-11-9" stroke="#2E6B30" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`,
+  cenoura: `<svg viewBox="0 0 40 40"><path d="M15 6l3 6M20 5l1 7M25 6l-3 6" stroke="#3F9142" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M20 13c6 0 9 5 8 11-1 7-5 12-8 15-3-3-7-8-8-15-1-6 2-11 8-11z" fill="#F0842E"/><path d="M20 17v18M15 20l2 12M25 20l-2 12" stroke="#D9701F" stroke-width="1.2" opacity="0.6"/></svg>`,
+  banana: `<svg viewBox="0 0 40 40"><path d="M11 27c-1 3 1 6 4 6 9 0 17-7 18-16 0-2-1-4-3-4-1 0-2 1-2 2-1 8-8 14-16 14-1 0-1-1-1-2z" fill="#F4C338"/><path d="M11 27c0-1 0-2 1-3" stroke="#D9A82B" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M28 9c1 1 2 3 2 4" stroke="#7A5A1E" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`,
+  ovos: `<svg viewBox="0 0 40 40"><ellipse cx="16" cy="24" rx="7" ry="9" fill="#F2E4C9"/><ellipse cx="25" cy="21" rx="7.5" ry="9.5" fill="#FFF8E8" stroke="#EDE0C0" stroke-width="1"/></svg>`,
+  cheiroverde: `<svg viewBox="0 0 40 40"><path d="M20 33V12" stroke="#3F9142" stroke-width="2" stroke-linecap="round"/><path d="M20 14c-3-3-8-3-8-3s1 5 5 7M20 18c-3-3-8-3-8-3s1 5 5 7M20 22c3-3 8-3 8-3s-1 5-5 7M20 26c3-3 8-3 8-3s-1 5-5 7" stroke="#4CAF50" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+  mel: `<svg viewBox="0 0 40 40"><path d="M14 11h12l1 5H13z" fill="#8B5A2B"/><path d="M13 16h14l-1.5 16a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8z" fill="#F5B93F"/><path d="M13 22h14M13 27h14" stroke="#D89A22" stroke-width="1.2"/><rect x="17" y="6" width="6" height="5" rx="1" fill="#8B5A2B"/></svg>`,
+  pimentao: `<svg viewBox="0 0 40 40"><path d="M19 8c0-1.5 1-3 2.5-3s1.5 1.5 0 2.5" stroke="#3F9142" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M18 9c3-1 5 0 6 1" stroke="#3F9142" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M20 11c7 0 10 6 9 13-1 6-5 10-9 10s-8-4-9-10c-1-7 2-13 9-13z" fill="#E23B3B"/><path d="M16 15c-1 3-1 7 0 10" stroke="#F26B5B" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/></svg>`,
+  cebola: `<svg viewBox="0 0 40 40"><path d="M20 9c1-2 3-4 3-4" stroke="#3F9142" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M20 9c-1-2-3-4-3-4" stroke="#3F9142" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M20 10c6 0 9 6 9 12 0 6-4 10-9 10s-9-4-9-10c0-6 3-12 9-12z" fill="#C77DC2"/><path d="M20 10v22M15 14c-1 5-1 12 0 17M25 14c1 5 1 12 0 17" stroke="#A85AA3" stroke-width="1" opacity="0.6"/></svg>`,
+  acerola: `<svg viewBox="0 0 40 40"><path d="M18 10c1-2 3-3 3-3s0 2.5-1 4" stroke="#3F9142" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="6.5" fill="#E4453B"/><circle cx="24" cy="18" r="7" fill="#EF5350"/><circle cx="19" cy="27" r="6" fill="#E4453B"/><path d="M15 20v0M24 18v0M19 27v0" stroke="#B71C1C" stroke-width="0.5"/></svg>`,
+};
+
 // ---------- "Banco de dados" simulado (produtos do catálogo) ----------
-// Dica: as fotos vêm do Pexels (banco gratuito, uso livre). Para trocar alguma,
-// troque a URL do campo "imagem" — se ficar vazio (""), o app usa o emoji como reserva.
 const produtos = [
-  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",       preco: 8.00,  unidade: "kg",  emoji: "🍅", imagem: "https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
-  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",     preco: 4.50,  unidade: "un",  emoji: "🥬", imagem: "https://images.pexels.com/photos/2893639/pexels-photo-2893639.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
-  { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza",        preco: 5.00,  unidade: "kg",  emoji: "🥕", imagem: "https://images.pexels.com/photos/73640/pexels-photo-73640.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
-  { id: 4, nome: "Banana Orgânica",  detalhe: "Carlos Lima",      preco: 6.50,  unidade: "kg",  emoji: "🍌", imagem: "https://images.pexels.com/photos/365810/pexels-photo-365810.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "frutas" },
-  { id: 5, nome: "Ovos Caipira",     detalhe: "Sítio Boa Vida",   preco: 18.00, unidade: "dz",  emoji: "🥚", imagem: "https://images.pexels.com/photos/2642201/pexels-photo-2642201.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "ovos" },
-  { id: 6, nome: "Cheiro Verde",     detalhe: "Teresa Maria",     preco: 3.00,  unidade: "maço", emoji: "🌿", imagem: "https://images.pexels.com/photos/1309426/pexels-photo-1309426.jpeg?auto=compress&cs=tinysrgb&w=200", categoria: "hortalicas" },
+  { id: 1, nome: "Tomate Orgânico",  detalhe: "João Silva",     preco: 8.00,  unidade: "kg",  icone: icones.tomate,      categoria: "legumes" },
+  { id: 2, nome: "Alface Orgânica",  detalhe: "Teresa Maria",   preco: 4.50,  unidade: "un",  icone: icones.alface,      categoria: "hortalicas" },
+  { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza",      preco: 5.00,  unidade: "kg",  icone: icones.cenoura,     categoria: "legumes" },
+  { id: 4, nome: "Banana Orgânica",  detalhe: "Carlos Lima",    preco: 6.50,  unidade: "kg",  icone: icones.banana,      categoria: "frutas" },
+  { id: 5, nome: "Ovos Caipira",     detalhe: "Sítio Boa Vida", preco: 18.00, unidade: "dz",  icone: icones.ovos,        categoria: "outros" },
+  { id: 6, nome: "Cheiro Verde",     detalhe: "Teresa Maria",   preco: 3.00,  unidade: "maço", icone: icones.cheiroverde, categoria: "hortalicas" },
+  { id: 7, nome: "Mel Puro",         detalhe: "Sítio Boa Vida", preco: 22.00, unidade: "un",  icone: icones.mel,         categoria: "outros" },
+  { id: 8, nome: "Pimentão",         detalhe: "Ana Souza",      preco: 7.00,  unidade: "kg",  icone: icones.pimentao,    categoria: "legumes" },
+  { id: 9, nome: "Cebola Roxa",      detalhe: "João Silva",     preco: 6.00,  unidade: "kg",  icone: icones.cebola,      categoria: "legumes" },
+  { id: 10, nome: "Acerola",         detalhe: "Carlos Lima",    preco: 9.50,  unidade: "kg",  icone: icones.acerola,     categoria: "frutas" },
 ];
-
-// Gera o HTML do "quadradinho" do produto: usa a foto se existir, senão cai pro emoji.
-// Se a foto existir mas falhar ao carregar (link quebrado, sem internet, etc.),
-// tratarErroImagem() troca automaticamente pelo emoji, sem deixar ícone de imagem quebrada.
-function iconeProduto(p, classeExtra) {
-  const classe = "produto-icone" + (classeExtra ? " " + classeExtra : "");
-  if (p.imagem) {
-    return `<img class="${classe}" src="${p.imagem}" alt="${p.nome}" loading="lazy" data-emoji="${p.emoji}" onerror="tratarErroImagem(this)">`;
-  }
-  return `<div class="${classe}">${p.emoji}</div>`;
-}
-
-function tratarErroImagem(img) {
-  const div = document.createElement("div");
-  div.className = img.className;
-  div.textContent = img.dataset.emoji;
-  img.replaceWith(div);
-}
 
 const categorias = [
   { id: "todos", nome: "Todos" },
   { id: "hortalicas", nome: "Hortaliças" },
+  { id: "legumes", nome: "Legumes" },
   { id: "frutas", nome: "Frutas" },
-  { id: "ovos", nome: "Ovos" },
+  { id: "outros", nome: "Outros" },
 ];
 
 // ---------- Estado da aplicação (em memória, some ao recarregar) ----------
@@ -46,24 +45,16 @@ let carrinho = {}; // { produtoId: quantidade }
 let categoriaAtiva = "todos";
 const TAXA_ENTREGA = 5.00;
 
-// ---------- Relógio da barra de status simulada ----------
-function atualizarRelogio() {
-  const agora = new Date();
-  const horas = String(agora.getHours()).padStart(2, "0");
-  const minutos = String(agora.getMinutes()).padStart(2, "0");
-  document.querySelectorAll(".status-hora").forEach(el => {
-    el.textContent = `${horas}:${minutos}`;
-  });
-}
-
 // ---------- Navegação entre telas ----------
 function irPara(idTela) {
   document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
   document.getElementById(idTela).classList.add("ativa");
+  window.scrollTo(0, 0);
 
   if (idTela === "tela-catalogo") renderizarCatalogo();
   if (idTela === "tela-carrinho") renderizarCarrinho();
   if (idTela === "tela-pagamento") renderizarPagamento();
+  if (idTela === "tela-entregador") renderizarEntregas();
 }
 
 // ---------- RF01 / Login e Cadastro (simulados, sem back-end ainda) ----------
@@ -104,19 +95,20 @@ function filtrarCategoria(idCategoria) {
   renderizarCatalogo();
 }
 
-function renderizarChipsCategoria() {
-  const container = document.getElementById("chips-categoria");
+function renderizarCategoriasSidebar() {
+  const container = document.getElementById("lista-categorias");
   if (!container) return;
   container.innerHTML = categorias.map(c => `
-    <button class="chip ${c.id === categoriaAtiva ? 'chip-ativo' : ''}" onclick="filtrarCategoria('${c.id}')">${c.nome}</button>
+    <button class="item-categoria ${c.id === categoriaAtiva ? 'ativo' : ''}" onclick="filtrarCategoria('${c.id}')">${c.nome}</button>
   `).join("");
 }
 
 function renderizarCatalogo() {
-  renderizarChipsCategoria();
+  renderizarCategoriasSidebar();
   const termo = (document.getElementById("busca-produto")?.value || "").toLowerCase();
-  const lista = document.getElementById("lista-produtos");
-  lista.innerHTML = "";
+  const grade = document.getElementById("grade-produtos");
+  if (!grade) return;
+  grade.innerHTML = "";
 
   const filtrados = produtos.filter(p => {
     const bateNome = p.nome.toLowerCase().includes(termo);
@@ -125,23 +117,21 @@ function renderizarCatalogo() {
   });
 
   if (filtrados.length === 0) {
-    lista.innerHTML = `<p class="carrinho-vazio">Nenhum produto encontrado.</p>`;
+    grade.innerHTML = `<p class="carrinho-vazio">Nenhum produto encontrado.</p>`;
     return;
   }
 
   filtrados.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "cartao-produto";
-    div.innerHTML = `
-      ${iconeProduto(p)}
-      <div class="produto-info">
-        <div class="produto-nome">${p.nome}</div>
-        <div class="produto-detalhe">${p.detalhe}</div>
-        <div class="produto-preco">${formatarMoeda(p.preco)} <span>/${p.unidade}</span></div>
-      </div>
-      <button class="btn-add-circular" onclick="adicionarAoCarrinho(${p.id})" aria-label="Adicionar ${p.nome}">+</button>
+    const card = document.createElement("div");
+    card.className = "produto-card";
+    card.innerHTML = `
+      <div class="produto-card-icone">${p.icone}</div>
+      <div class="produto-card-nome">${p.nome}</div>
+      <div class="produto-card-detalhe">${p.detalhe}</div>
+      <div class="produto-card-preco">${formatarMoeda(p.preco)} <span>/${p.unidade}</span></div>
+      <button class="btn-adicionar-card" onclick="adicionarAoCarrinho(${p.id})">Adicionar</button>
     `;
-    lista.appendChild(div);
+    grade.appendChild(card);
   });
 
   atualizarBadgeCarrinho();
@@ -181,6 +171,7 @@ function formatarMoeda(valor) {
 
 function renderizarCarrinho() {
   const lista = document.getElementById("lista-carrinho");
+  if (!lista) return;
   lista.innerHTML = "";
 
   const itens = Object.entries(carrinho);
@@ -193,10 +184,10 @@ function renderizarCarrinho() {
       const div = document.createElement("div");
       div.className = "item-carrinho";
       div.innerHTML = `
-        ${iconeProduto(produto, "produto-icone-sm")}
+        <div class="item-carrinho-icone">${produto.icone}</div>
         <div class="item-carrinho-info">
-          <div class="produto-nome">${produto.nome}</div>
-          <div class="produto-detalhe">${formatarMoeda(produto.preco)} /${produto.unidade}</div>
+          <strong>${produto.nome}</strong>
+          <small>${formatarMoeda(produto.preco)} /${produto.unidade}</small>
         </div>
         <div class="qtd-controle">
           <button onclick="alterarQuantidade(${produto.id}, -1)" aria-label="Diminuir">−</button>
@@ -264,9 +255,76 @@ function confirmarPagamento() {
   irPara("tela-status");
 }
 
-// ---------- Inicialização ----------
-document.addEventListener("DOMContentLoaded", () => {
-  renderizarCatalogo();
-  atualizarRelogio();
-  setInterval(atualizarRelogio, 30000);
-});
+// ---------- RF07: Entregador visualiza as entregas atribuídas ----------
+let entregas = [
+  { id: 1, pedido: "#0038", cliente: "Maria Oliveira", endereco: "Rua das Flores, 120 - Centro", itens: 4, total: 42.50, status: "pendente" },
+  { id: 2, pedido: "#0039", cliente: "José Ferreira",   endereco: "Av. Piauí, 55 - São José",     itens: 2, total: 18.00, status: "a_caminho" },
+  { id: 3, pedido: "#0040", cliente: "Ana Beatriz",      endereco: "Rua Nova, 300 - Centro",        itens: 6, total: 67.30, status: "pendente" },
+  { id: 4, pedido: "#0035", cliente: "Paulo Sousa",       endereco: "Rua da Paz, 12 - Vila Nova",    itens: 3, total: 29.90, status: "entregue" },
+];
+
+const iconeLocal = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>`;
+
+const filtrosEntrega = [
+  { id: "ativas", nome: "Ativas" },
+  { id: "entregue", nome: "Concluídas" },
+];
+let filtroEntregaAtivo = "ativas";
+
+const textoStatus = { pendente: "Pendente", a_caminho: "A caminho", entregue: "Entregue" };
+const textoAcao = { pendente: "Aceitar entrega", a_caminho: "Marcar como entregue" };
+
+function filtrarEntregas(idFiltro) {
+  filtroEntregaAtivo = idFiltro;
+  renderizarEntregas();
+}
+
+function renderizarChipsEntrega() {
+  const container = document.getElementById("chips-status-entrega");
+  if (!container) return;
+  container.innerHTML = filtrosEntrega.map(f => `
+    <button class="chip ${f.id === filtroEntregaAtivo ? 'chip-ativo' : ''}" onclick="filtrarEntregas('${f.id}')">${f.nome}</button>
+  `).join("");
+}
+
+function renderizarEntregas() {
+  renderizarChipsEntrega();
+  const lista = document.getElementById("lista-entregas");
+  if (!lista) return;
+
+  const filtradas = entregas.filter(e =>
+    filtroEntregaAtivo === "ativas" ? e.status !== "entregue" : e.status === "entregue"
+  );
+
+  if (filtradas.length === 0) {
+    lista.innerHTML = `<p class="carrinho-vazio">Nenhuma entrega ${filtroEntregaAtivo === "ativas" ? "pendente" : "concluída"} no momento.</p>`;
+    return;
+  }
+
+  lista.innerHTML = filtradas.map(e => `
+    <div class="cartao-entrega">
+      <div class="entrega-topo">
+        <div>
+          <div class="entrega-pedido">Pedido ${e.pedido}</div>
+          <div class="entrega-cliente">${e.cliente} · ${e.itens} itens</div>
+        </div>
+        <span class="status-badge status-${e.status}">${textoStatus[e.status]}</span>
+      </div>
+      <div class="entrega-endereco">${iconeLocal}<span>${e.endereco}</span></div>
+      <div class="entrega-rodape">
+        <span class="entrega-valor">${formatarMoeda(e.total)}</span>
+        ${e.status !== "entregue"
+          ? `<button class="btn-entrega-acao" onclick="avancarStatusEntrega(${e.id})">${textoAcao[e.status]}</button>`
+          : `<span class="produto-detalhe">✔ Concluída</span>`}
+      </div>
+    </div>
+  `).join("");
+}
+
+function avancarStatusEntrega(id) {
+  const entrega = entregas.find(e => e.id === id);
+  if (!entrega) return;
+  if (entrega.status === "pendente") entrega.status = "a_caminho";
+  else if (entrega.status === "a_caminho") entrega.status = "entregue";
+  renderizarEntregas();
+}
