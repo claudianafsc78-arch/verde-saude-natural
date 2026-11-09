@@ -28,13 +28,25 @@ const icones = {
 
 
 // ---------- Produtos ----------
+const imagensProdutos = {
+  1: "imagens/produtos/tomate.jpg",
+  2: "imagens/produtos/alface.jpg",
+  3: "imagens/produtos/cenoura.jpg",
+  4: "imagens/produtos/banana.jpg",
+  5: "imagens/produtos/ovos.jpg",
+  6: "imagens/produtos/cheiro-verde.jpg",
+  7: "imagens/produtos/mel.jpg",
+  8: "imagens/produtos/pimentao.jpg",
+  9: "imagens/produtos/cebola.jpg",
+  10: "imagens/produtos/acerola.jpg"
+};
 const produtos = [
-  { id: 1, nome: "Tomate Orgânico", detalhe: "João Silva", preco: 8.00, unidade: "kg", icone: icones.tomate, categoria: "legumes" },
+  { id: 1, nome: "Tomate Orgânico", detalhe: "João Silva", preco: 8.00, unidade: "kg", icone: icones.tomate, categoria: "hortalicas" },
   { id: 2, nome: "Alface Orgânica", detalhe: "Teresa Maria", preco: 4.50, unidade: "un", icone: icones.alface, categoria: "hortalicas" },
   { id: 3, nome: "Cenoura Orgânica", detalhe: "Ana Souza", preco: 5.00, unidade: "kg", icone: icones.cenoura, categoria: "legumes" },
   { id: 4, nome: "Banana Orgânica", detalhe: "Carlos Lima", preco: 6.50, unidade: "kg", icone: icones.banana, categoria: "frutas" },
   { id: 5, nome: "Ovos Caipira", detalhe: "Sítio Boa Vida", preco: 18.00, unidade: "dz", icone: icones.ovos, categoria: "outros" },
-  { id: 6, nome: "Cheiro Verde", detalhe: "Teresa Maria", preco: 3.00, unidade: "maço", icone: icones.cheiroverde, categoria: "hortalicas" },
+  { id: 6, nome: "Cheiro Verde", detalhe: "Teresa Maria", preco: 3.00, unidade: "maço", icone: icones.cheiroverde, categoria: "outros" },
   { id: 7, nome: "Mel Puro", detalhe: "Sítio Boa Vida", preco: 22.00, unidade: "un", icone: icones.mel, categoria: "outros" },
   { id: 8, nome: "Pimentão", detalhe: "Ana Souza", preco: 7.00, unidade: "kg", icone: icones.pimentao, categoria: "legumes" },
   { id: 9, nome: "Cebola Roxa", detalhe: "João Silva", preco: 6.00, unidade: "kg", icone: icones.cebola, categoria: "legumes" },
@@ -50,6 +62,7 @@ const categorias = [
 ];
 
 let usuarioLogado = null;
+let entregadorLogado = null;
 let carrinho = {};
 let categoriaAtiva = "todos";
 const TAXA_ENTREGA = 5.00;
@@ -60,6 +73,10 @@ const TAXA_ENTREGA = 5.00;
 // ======================================================
 
 function irPara(idTela) {
+  if (idTela === "tela-entregador" && !entregadorLogado) {
+    alert("Entre na sua conta de entregador para continuar.");
+    idTela = "tela-acesso-entregador";
+  }
 
   // Telas que só podem ser acessadas depois do cadastro/login
   const telasProtegidas = [
@@ -127,8 +144,7 @@ function irPara(idTela) {
 // LOGIN
 // ======================================================
 
-function fazerLogin() {
-
+async function fazerLogin() {
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
   const erro = document.getElementById("login-erro");
@@ -138,15 +154,34 @@ function fazerLogin() {
     return;
   }
 
-  erro.textContent = "";
+  erro.textContent = "Verificando cadastro...";
 
-  usuarioLogado = {
-    email: email
-  };
+  try {
+    const resposta = await fetch("http://localhost:8081/api/clientes");
+    if (!resposta.ok) throw new Error("Falha ao consultar clientes.");
 
-  alert("Login realizado com sucesso!");
+    const clientes = await resposta.json();
+    const cliente = clientes.find(c => c.email && c.email.toLowerCase() === email.toLowerCase());
 
-  irPara("tela-catalogo");
+    if (!cliente) {
+      erro.textContent = "E-mail não cadastrado.";
+      return;
+    }
+
+    usuarioLogado = {
+      id: cliente.id,
+      nome: cliente.nome,
+      email: cliente.email,
+      telefone: cliente.telefone
+    };
+
+    erro.textContent = "";
+    alert("Login realizado com sucesso!");
+    irPara("tela-catalogo");
+  } catch (e) {
+    console.error(e);
+    erro.textContent = "Não foi possível verificar o cadastro. Verifique se a API está ligada.";
+  }
 }
 
 
@@ -154,8 +189,7 @@ function fazerLogin() {
 // CADASTRO
 // ======================================================
 
-function fazerCadastro() {
-
+async function fazerCadastro() {
   const nome = document.getElementById("cad-nome").value.trim();
   const email = document.getElementById("cad-email").value.trim();
   const telefone = document.getElementById("cad-telefone").value.trim();
@@ -168,20 +202,45 @@ function fazerCadastro() {
     return;
   }
 
-  erro.textContent = "";
+  const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Cria o usuário
-  usuarioLogado = {
-    nome: nome,
-    email: email,
-    telefone: telefone,
-    endereco: endereco
-  };
+  if (!formatoEmail.test(email)) {
+    erro.textContent = "Digite um e-mail válido."; 
+    return;
+  }
 
-  alert("Cadastro realizado com sucesso!");
+  erro.textContent = "Salvando cadastro...";
 
-  // Depois do cadastro, libera o catálogo
-  irPara("tela-catalogo");
+  try {
+    const resposta = await fetch("http://localhost:8081/api/clientes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ nome, email, telefone })
+    });
+
+    if (!resposta.ok) {
+      throw new Error("A API não conseguiu salvar o cadastro.");
+    }
+
+    const cliente = await resposta.json();
+
+    usuarioLogado = {
+      id: cliente.id,
+      nome,
+      email,
+      telefone,
+      endereco
+    };
+
+    erro.textContent = "";
+    alert("Cadastro realizado com sucesso!");
+    irPara("tela-catalogo");
+
+  } catch (e) {
+    erro.textContent = "Não foi possível salvar o cadastro. Verifique se a API está ligada e tente novamente.";
+  }
 }
 
 
@@ -288,7 +347,8 @@ function renderizarCatalogo() {
 
     card.innerHTML = `
       <div class="produto-card-icone">
-        ${p.icone}
+        <img src="${imagensProdutos[p.id]}" alt="${p.nome}">
+        <span class="produto-card-fallback" style="display:none">${p.icone}</span>
       </div>
 
       <div class="produto-card-nome">
@@ -451,7 +511,7 @@ function renderizarCarrinho() {
 
       div.innerHTML = `
         <div class="item-carrinho-icone">
-          ${produto.icone}
+          <img src="${imagensProdutos[produto.id]}" alt="${produto.nome}">
         </div>
 
         <div class="item-carrinho-info">
@@ -565,86 +625,62 @@ function renderizarPagamento() {
 }
 
 
-function confirmarPagamento() {
-
+async function confirmarPagamento() {
   if (!usuarioLogado) {
-
-    alert("Faça seu cadastro ou login antes de realizar o pagamento.");
-
+    alert("Faca seu cadastro ou login antes de realizar o pagamento.");
     irPara("tela-cadastro");
-
     return;
   }
 
-  const erro =
-    document.getElementById("pagamento-erro");
+  const erro = document.getElementById("pagamento-erro");
+  const formaPagamento = document.querySelector('input[name="pagamento"]:checked');
 
-  const formaPagamento =
-    document.querySelector(
-      'input[name="pagamento"]:checked'
-    );
-
-  if (!formaPagamento) {
-
-    erro.textContent =
-      "Selecione uma forma de pagamento.";
-
+  if (!formaPagamento || Object.keys(carrinho).length === 0 || !usuarioLogado.id) {
+    erro.textContent = "Verifique seu cadastro, o pagamento e o carrinho.";
     return;
   }
 
-  if (Object.keys(carrinho).length === 0) {
+  const totalItens = Object.values(carrinho).reduce((soma, qtd) => soma + qtd, 0);
+  const totalPedido = calcularSubtotal() + TAXA_ENTREGA;
+  erro.textContent = "Registrando pedido...";
 
-    erro.textContent =
-      "Seu carrinho está vazio.";
+  try {
+    const rPedido = await fetch("http://localhost:8081/api/pedidos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "Recebido", cliente: { id: usuarioLogado.id } })
+    });
+    if (!rPedido.ok) throw new Error("Falha ao registrar pedido.");
 
-    return;
+    const pedido = await rPedido.json();
+
+    const rPagamento = await fetch("http://localhost:8081/api/pagamentos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        metodo: formaPagamento.value,
+        status: "PAGO",
+        pedido: { id: pedido.id }
+      })
+    });
+    if (!rPagamento.ok) throw new Error("Pedido " + pedido.id + " criado, mas pagamento nao registrado. Nao tente novamente antes de consultar a API.");
+
+    document.getElementById("pedido-numero").textContent = "Pedido #" + String(pedido.id).padStart(3, "0");
+    document.getElementById("pedido-itens").textContent = totalItens + (totalItens === 1 ? " item" : " itens");
+    document.getElementById("pedido-total-status").textContent = formatarMoeda(totalPedido);
+    document.getElementById("status-vazio").classList.add("escondido");
+    document.getElementById("status-pedido").classList.remove("escondido");
+
+    carrinho = {};
+    atualizarBadgeCarrinho();
+    erro.textContent = "";
+    irPara("tela-status");
+  } catch (e) {
+    console.error("Erro ao confirmar pagamento:", e);
+    erro.textContent = e.message || "Nao foi possivel concluir o pedido.";
   }
-
-  erro.textContent = "";
-
-  const totalItens =
-    Object.values(carrinho)
-      .reduce(
-        (soma, qtd) => soma + qtd,
-        0
-      );
-
-  const totalPedido =
-    calcularSubtotal() + TAXA_ENTREGA;
-
-  document.getElementById(
-    "pedido-numero"
-  ).textContent =
-    "Pedido #001";
-
-  document.getElementById(
-    "pedido-itens"
-  ).textContent =
-    totalItens +
-    (totalItens === 1 ? " item" : " itens");
-
-  document.getElementById(
-    "pedido-total-status"
-  ).textContent =
-    formatarMoeda(totalPedido);
-
-  document.getElementById(
-    "status-vazio"
-  ).classList.add("escondido");
-
-  document.getElementById(
-    "status-pedido"
-  ).classList.remove("escondido");
-
-  carrinho = {};
-
-  atualizarBadgeCarrinho();
-
-  irPara("tela-status");
 }
 
-
-// ======================================================
 // ENTREGAS
 // ======================================================
 
@@ -782,7 +818,61 @@ function renderizarChipsEntrega() {
 // RENDERIZAR ENTREGAS
 // ======================================================
 
+async function cadastrarEntregador(event) {
+  event.preventDefault();
+  const erro = document.getElementById("ent-cad-erro");
+  erro.textContent = "Realizando cadastro...";
+  const dados = {
+    nome: document.getElementById("ent-cad-nome").value.trim(),
+    email: document.getElementById("ent-cad-email").value.trim(),
+    telefone: document.getElementById("ent-cad-telefone").value.trim(),
+    senha: document.getElementById("ent-cad-senha").value
+  };
+  try {
+    const resposta = await fetch("http://localhost:8081/api/entregadores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    });
+    const resultado = await resposta.json();
+    if (!resposta.ok) {
+      throw new Error(resultado.message || resultado.mensagem || "Não foi possível realizar o cadastro.");
+    }
+    entregadorLogado = resultado;
+    alert("Cadastro realizado com sucesso!");
+    irPara("tela-entregador");
+  } catch (erroCadastro) {
+    erro.textContent = erroCadastro.message || "Erro ao cadastrar entregador.";
+  }
+}
+async function fazerLoginEntregador(event) {
+  event.preventDefault();
+  const erro = document.getElementById("ent-login-erro");
+  erro.textContent = "Verificando acesso...";
+  const dados = {
+    email: document.getElementById("ent-login-email").value.trim(),
+    senha: document.getElementById("ent-login-senha").value
+  };
+  try {
+    const resposta = await fetch("http://localhost:8081/api/entregadores/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    });
+    const resultado = await resposta.json();
+    if (!resposta.ok) {
+      throw new Error(resultado.message || resultado.mensagem || "E-mail ou senha inválidos.");
+    }
+    entregadorLogado = resultado;
+    alert("Login realizado com sucesso!");
+    irPara("tela-entregador");
+  } catch (erroLogin) {
+    erro.textContent = erroLogin.message || "Não foi possível entrar.";
+  }
+}
+
 function renderizarEntregas() {
+  if (!entregadorLogado) { irPara('tela-acesso-entregador'); return; }
 
   renderizarChipsEntrega();
 
@@ -913,3 +1003,61 @@ function avancarStatusEntrega(id) {
 
   renderizarEntregas();
 }
+
+
+
+
+
+
+
+
+async function fazerCadastroProdutor() {
+  const nome = document.getElementById("prod-nome").value.trim();
+  const email = document.getElementById("prod-email").value.trim();
+  const telefone = document.getElementById("prod-telefone").value.trim();
+  const propriedade = document.getElementById("prod-propriedade").value.trim();
+  const endereco = document.getElementById("prod-endereco").value.trim();
+  const produtos = document.getElementById("prod-produtos").value.trim();
+  const senha = document.getElementById("prod-senha").value;
+  const confirmarSenha = document.getElementById("prod-confirmar-senha").value;
+  const erro = document.getElementById("produtor-erro");
+
+  erro.textContent = "";
+
+  if (!nome || !email || !telefone || !propriedade || !endereco || !produtos || !senha || !confirmarSenha) {
+    erro.textContent = "Preencha todos os campos.";
+    return;
+  }
+
+  const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!formatoEmail.test(email)) {
+    erro.textContent = "Digite um e-mail válido."; 
+    return;
+  }
+
+  if (senha !== confirmarSenha) {
+    erro.textContent = "As senhas nao coincidem.";
+    return;
+  }
+
+  try {
+    const resposta = await fetch("http://localhost:8081/api/produtores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, telefone, propriedade, endereco, produtos, senha })
+    });
+
+    if (!resposta.ok) {
+      const mensagem = await resposta.text();
+      throw new Error(mensagem || "Nao foi possivel cadastrar.");
+    }
+
+    alert("Cadastro de produtor realizado com sucesso!");
+    irPara("tela-splash");
+  } catch (e) {
+    erro.textContent = e.message || "Erro ao conectar com a API.";
+  }
+}
+
+

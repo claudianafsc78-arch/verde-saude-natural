@@ -49,16 +49,17 @@
         <p>Conheça a nossa seleção de produtos orgânicos, direto do produtor até você, de forma simples e consciente.</p>
         <div class="hero-botoes">
           <button class="btn-solido-lg" onclick="irPara('tela-catalogo')">Ver produtos</button>
-          <button class="btn-outline-lg" onclick="irPara('tela-entregador')">Sou entregador</button>
+          <button class="btn-outline-lg" onclick="irPara('tela-acesso-entregador')">Sou entregador</button>
+        </div>
+        <div class="hero-botoes">
+          <button class="btn-solido-lg" onclick="irPara('tela-cadastro')">Cadastrar como cliente</button>
+          <button class="btn-outline-lg" onclick="irPara('tela-produtor')">Cadastrar como produtor</button>
         </div>
       </div>
-      <div class="hero-ilustracao" aria-hidden="true">
-        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#DCFCE7"/></svg>
-        <span class="hero-emoji-grande">🥬</span>
-        <span class="hero-emoji-flutuante hero-emoji-1">🍅</span>
-        <span class="hero-emoji-flutuante hero-emoji-2">🥕</span>
-        <span class="hero-emoji-flutuante hero-emoji-3">🍌</span>
-      </div>
+      <div class="hero-ilustracao">
+  <img src="imagens/capa/capa-hortifruti.jpg"
+       alt="Hortaliças e produtos naturais frescos">
+</div>
     </section>
 
     <section class="faixa-beneficios">
@@ -112,6 +113,44 @@
     </div>
   </section>
 
+  <!-- ===================== TELA: CADASTRO DO PRODUTOR ===================== -->
+  <section id="tela-produtor" class="tela">
+    <div class="tela-auth">
+      <div class="cartao-auth">
+        <svg class="logo-mark logo-mark-md"><use href="#logoSvg"/></svg>
+        <h2>Cadastro de produtor</h2>
+        <p class="auth-subtitulo">Cadastre sua propriedade e seus produtos</p>
+
+        <label for="prod-nome">Nome completo</label>
+        <input type="text" id="prod-nome" placeholder="Seu nome completo">
+
+        <label for="prod-email">E-mail</label>
+        <input type="email" id="prod-email" placeholder="seu@email.com">
+
+        <label for="prod-telefone">Telefone</label>
+        <input type="tel" id="prod-telefone" placeholder="(89) 90000-0000">
+
+        <label for="prod-propriedade">Nome da propriedade rural</label>
+        <input type="text" id="prod-propriedade" placeholder="Nome da sua propriedade">
+
+        <label for="prod-endereco">Endereço da propriedade</label>
+        <input type="text" id="prod-endereco" placeholder="Localização da propriedade">
+
+        <label for="prod-produtos">Produtos que cultiva ou produz</label>
+        <textarea id="prod-produtos" placeholder="Ex.: tomate, alface, mel, ovos"></textarea>
+
+        <label for="prod-senha">Senha</label>
+        <input type="password" id="prod-senha" placeholder="Crie uma senha">
+
+        <label for="prod-confirmar-senha">Confirmar senha</label>
+        <input type="password" id="prod-confirmar-senha" placeholder="Digite a senha novamente">
+
+        <button class="btn-solido-lg btn-full" onclick="fazerCadastroProdutor()">Criar conta de produtor</button>
+        <p id="produtor-erro" class="mensagem-erro"></p>
+        <button class="link-inline auth-voltar" onclick="irPara('tela-splash')">← Voltar ao início</button>
+      </div>
+    </div>
+  </section>
   <!-- ===================== TELA: CATÁLOGO (RF03) ===================== -->
   <section id="tela-catalogo" class="tela">
     <header class="navbar">
@@ -271,6 +310,45 @@
     </div>
   </section>
 
+  <!-- ===================== ACESSO DO ENTREGADOR ===================== -->
+  <section id="tela-acesso-entregador" class="tela">
+    <header class="navbar">
+      <div class="navbar-acoes">
+        <button class="link-inline" onclick="irPara('tela-splash')">← Início</button>
+      </div>
+    </header>
+    <div class="pagina-container pagina-estreita">
+      <div class="pagina-cabecalho">
+        <h1>Acesso do Entregador</h1>
+        <p>Entre na sua conta ou cadastre-se para acessar as entregas.</p>
+      </div>
+
+      <h2>Já tenho cadastro</h2>
+      <form onsubmit="fazerLoginEntregador(event)">
+        <label for="ent-login-email">E-mail</label>
+        <input id="ent-login-email" type="email" required>
+        <label for="ent-login-senha">Senha</label>
+        <input id="ent-login-senha" type="password" required>
+        <p id="ent-login-erro"></p>
+        <button class="btn-solido-lg btn-full" type="submit">Entrar</button>
+      </form>
+
+      <hr>
+      <h2>Quero me cadastrar</h2>
+      <form onsubmit="cadastrarEntregador(event)">
+        <label for="ent-cad-nome">Nome completo</label>
+        <input id="ent-cad-nome" type="text" required>
+        <label for="ent-cad-email">E-mail</label>
+        <input id="ent-cad-email" type="email" required>
+        <label for="ent-cad-telefone">Telefone</label>
+        <input id="ent-cad-telefone" type="tel" required>
+        <label for="ent-cad-senha">Senha</label>
+        <input id="ent-cad-senha" type="password" required>
+        <p id="ent-cad-erro"></p>
+        <button class="btn-solido-lg btn-full" type="submit">Cadastrar como entregador</button>
+      </form>
+    </div>
+  </section>
   <!-- ===================== TELA: ENTREGADOR (RF07) ===================== -->
   <section id="tela-entregador" class="tela">
     <header class="navbar">
@@ -289,3 +367,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
